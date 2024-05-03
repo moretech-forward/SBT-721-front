@@ -17,12 +17,12 @@ Explore the features and functionalities of SBT721 through our live demos:
 2. [Administration Panel](https://moretech-forward.github.io/SBT-721-front/erc721-admin/index.html) - Access administrative controls.
 
 # Feedback
-We value your feedback! Please leave your reviews and suggestions on our [Google Docs](https://docs.google.com/document/d/1B18EkMdZKfJIBc-rCqlAuUOhOcGvFTZnikDjzBGI4qc/edit?usp=sharing).
+We value your feedback! Please leave your reviews and suggestions on our [Google Docs](https://docs.google.com/document/d/1AVWz6dbGpwhlsXKHclo2SAlNXrGBPIEJJqQNBEFtQP4/edit?usp=sharing).
 
 # Tools Used
-- Tailwind CSS: A utility-first CSS framework for building custom designs quickly.
-- DaisyUI: A plugin for Tailwind CSS that provides a set of beautiful components and presets.
-- Toastify JS: A simple, flexible, and customizable toast notification library for JavaScript applications.
-- Ethers JS: A library for interacting with the Ethereum blockchain and wallets.
+- **Tailwind CSS**: A utility-first CSS framework for building custom designs quickly.
+- **DaisyUI**: A plugin for Tailwind CSS that provides a set of beautiful components and presets.
+- **Toastify JS**: A simple, flexible, and customizable toast notification library for JavaScript applications.
+- **Ethers JS**: A library for interacting with the Ethereum blockchain and wallets.
 
 Start securing and controlling your tokenized assets with SBT721! 🚀

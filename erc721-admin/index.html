@@ -220,235 +220,49 @@
     }, 3000)
 </script>
 
-<script
-        src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.12.1/ethers.umd.min.js"
-        type="application/javascript"
-></script>
+<script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js"
+        type="application/javascript"></script>
 
 <script>
     const abi = [
-        {
-            inputs: [
-                {
-                    internalType: "string",
-                    name: "_name",
-                    type: "string",
-                },
-                {
-                    internalType: "string",
-                    name: "_symbol",
-                    type: "string",
-                },
-            ],
-            stateMutability: "payable",
-            type: "constructor",
-        },
-        {
-            anonymous: false,
-            inputs: [
-                {
-                    indexed: true,
-                    internalType: "address",
-                    name: "user",
-                    type: "address",
-                },
-                {
-                    indexed: true,
-                    internalType: "address",
-                    name: "newOwner",
-                    type: "address",
-                },
-            ],
-            name: "OwnershipTransferred",
-            type: "event",
-        },
-        {
-            anonymous: false,
-            inputs: [
-                {
-                    indexed: true,
-                    internalType: "address",
-                    name: "from",
-                    type: "address",
-                },
-                {
-                    indexed: true,
-                    internalType: "address",
-                    name: "to",
-                    type: "address",
-                },
-                {
-                    indexed: true,
-                    internalType: "uint256",
-                    name: "id",
-                    type: "uint256",
-                },
-            ],
-            name: "Transfer",
-            type: "event",
-        },
-        {
-            inputs: [
-                {
-                    internalType: "address",
-                    name: "owner",
-                    type: "address",
-                },
-            ],
-            name: "balanceOf",
-            outputs: [{internalType: "uint256", name: "", type: "uint256"}],
-            stateMutability: "view",
-            type: "function",
-        },
-        {
-            inputs: [
-                {
-                    internalType: "uint256",
-                    name: "id",
-                    type: "uint256",
-                },
-            ],
-            name: "burn",
-            outputs: [],
-            stateMutability: "payable",
-            type: "function",
-        },
-        {
-            inputs: [],
-            name: "name",
-            outputs: [{internalType: "string", name: "", type: "string"}],
-            stateMutability: "view",
-            type: "function",
-        },
-        {
-            inputs: [],
-            name: "owner",
-            outputs: [{internalType: "address", name: "", type: "address"}],
-            stateMutability: "view",
-            type: "function",
-        },
-        {
-            inputs: [
-                {
-                    internalType: "uint256",
-                    name: "id",
-                    type: "uint256",
-                },
-            ],
-            name: "ownerOf",
-            outputs: [
-                {
-                    internalType: "address",
-                    name: "owner",
-                    type: "address",
-                },
-            ],
-            stateMutability: "view",
-            type: "function",
-        },
-        {
-            inputs: [
-                {
-                    internalType: "address[]",
-                    name: "to",
-                    type: "address[]",
-                },
-                {
-                    internalType: "string[]",
-                    name: "uris",
-                    type: "string[]",
-                },
-            ],
-            name: "safeBatchMint",
-            outputs: [],
-            stateMutability: "payable",
-            type: "function",
-        },
-        {
-            inputs: [
-                {
-                    internalType: "address",
-                    name: "to",
-                    type: "address",
-                },
-                {internalType: "string", name: "uri", type: "string"},
-            ],
-            name: "safeMint",
-            outputs: [],
-            stateMutability: "payable",
-            type: "function",
-        },
-        {
-            inputs: [
-                {
-                    internalType: "bytes4",
-                    name: "interfaceId",
-                    type: "bytes4",
-                },
-            ],
-            name: "supportsInterface",
-            outputs: [{internalType: "bool", name: "", type: "bool"}],
-            stateMutability: "view",
-            type: "function",
-        },
-        {
-            inputs: [],
-            name: "symbol",
-            outputs: [{internalType: "string", name: "", type: "string"}],
-            stateMutability: "view",
-            type: "function",
-        },
-        {
-            inputs: [
-                {
-                    internalType: "uint256",
-                    name: "tokenId",
-                    type: "uint256",
-                },
-            ],
-            name: "tokenURI",
-            outputs: [{internalType: "string", name: "", type: "string"}],
-            stateMutability: "view",
-            type: "function",
-        },
-        {
-            inputs: [
-                {
-                    internalType: "address",
-                    name: "newOwner",
-                    type: "address",
-                },
-            ],
-            name: "transferOwnership",
-            outputs: [],
-            stateMutability: "payable",
-            type: "function",
-        },
+        "constructor(string _name, string _symbol) payable",
+        "event OwnershipTransferred(address indexed user, address indexed newOwner)",
+        "event Transfer(address indexed from, address indexed to, uint256 indexed id)",
+        "function balanceOf(address owner) view returns (uint256)",
+        "function burn(uint256 id)",
+        "function myAddr() view returns (address)",
+        "function name() view returns (string)",
+        "function owner() view returns (address)",
+        "function ownerOf(uint256 id) view returns (address owner)",
+        "function safeBatchMint(address[] to, string[] uris)",
+        "function safeMint(address to, string uri)",
+        "function supportsInterface(bytes4 interfaceId) view returns (bool)",
+        "function symbol() view returns (string)",
+        "function tokenURI(uint256 tokenId) view returns (string)",
+        "function transferOwnership(address newOwner)"
     ];
-    let contractAddress;
+    const privateKey =
+        "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80";
+    let contractAddress = '0x5FbDB2315678afecb367f032d93F642f64180aa3';
 
-    const getAddress = async () => {
-        setTimeout(() => {
-            contractAddress = document.getElementById('future_address').innerHTML
-        }, 3000);
-    }
-
-    getAddress()
+    // const getAddress = async () => {
+    //     setTimeout(() => {
+    //         contractAddress = document.getElementById('future_address').innerHTML
+    //     }, 3000);
+    // }
+    //
+    // getAddress()
 
     let provider;
-    let signer;
-    let connectContract;
+    let wallet;
+    let contract;
 
-    const initApp = async () => {
-        provider = new ethers.BrowserProvider(this.parent.ethereum)
-        signer = await provider.getSigner()
-
-        connectContract = new ethers.Contract(contractAddress, abi, signer);
-        console.log("Account:", await signer.getAddress());
+    async function connectToContract() {
+        provider = new ethers.providers.JsonRpcProvider();
+        wallet = new ethers.Wallet(privateKey, provider);
+        contract = new ethers.Contract(contractAddress, abi, wallet);
     }
-    setTimeout(() => {
-        initApp()
-    }, 3000)
+    connectToContract()
 </script>
 <script
         type="text/javascript"
@@ -469,7 +283,7 @@
         if (!to) {
             // ничего не ввел
             try {
-                await connectContract.transferOwnership(
+                await contract.transferOwnership(
                     "0x0000000000000000000000000000000000000000"
                 );
                 console.log(await connectContract.owner());
@@ -494,17 +308,17 @@
                     gravity: "top",
                 }).showToast();
             }
-            console.log(await connectContract.owner());
+            console.log(await contract.owner());
             error = true;
             if (!error) {
                 try {
-                    await connectContract.transferOwnership(to);
+                    await contract.transferOwnership(to);
                     Toastify({
                         text: `Success transferOwnership!`,
                         position: "right",
                         gravity: "top",
                     }).showToast();
-                    console.log(await connectContract.owner());
+                    console.log(await contract.owner());
                     transferOwnership.reset()
                 } catch (e) {
                     console.log(e)
@@ -536,7 +350,7 @@
         }
         if (!error) {
             try {
-                await connectContract.safeMint(to, uri);
+                await contract.safeMint(to, uri);
                 mintForm.reset();
                 Toastify({
                     text: `Successfull mint!`,
@@ -561,7 +375,7 @@
         const id = formData.get("id");
 
         try {
-            await connectContract.burn(id);
+            await contract.burn(id);
             burnForm.reset();
             Toastify({
                 text: `Successfull burn!`,
@@ -616,7 +430,7 @@
 
         if (!error) {
             try {
-                await connectContract.safeBatchMint(uniqueWalletsArray, urisArray);
+                await contract.safeBatchMint(uniqueWalletsArray, urisArray);
                 batchForm.reset()
                 Toastify({
                     text: `The number of addresses and links did not match! Check again, there may be duplicates!`,

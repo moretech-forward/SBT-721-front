@@ -1,160 +1,175 @@
 <body id="itrf">
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<link
-        href="https://cdn.jsdelivr.net/npm/daisyui@4.10.2/dist/full.min.css"
-        rel="stylesheet"
-        type="text/css"
-/>
-<link
-        href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css"
-        rel="stylesheet"
-        type="text/css"
-/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link
+    href="https://cdn.jsdelivr.net/npm/daisyui@4.10.2/dist/full.min.css"
+    rel="stylesheet"
+    type="text/css"
+  />
+  <link
+    href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css"
+    rel="stylesheet"
+    type="text/css"
+  />
 
-<link href="./output.css" rel="stylesheet"/>
-<section
-        data-theme="dark"
-        class="pt-20 flex items-center flex-col gap-10 min-h-screen bg-base-100"
->
-    <br/>
+  <link href="./output.css" rel="stylesheet" />
+  <section
+    data-theme="dark"
+    class="pt-20 flex items-center flex-col gap-10 min-h-screen bg-base-100"
+  >
+    <br />
     <h1 class="text-center text-3xl font-extrabold text-white">
-        Soulbound Token (ERC721)
+      Soulbound Token (ERC721)
     </h1>
     <div role="tablist" class="tabs tabs-boxed">
-        <a
-                role="tab"
-                id="nft-tab"
-                class="tab tab-active transition-all duration-200"
-        >
-            All NFT
-        </a>
+      <a
+        role="tab"
+        id="nft-tab"
+        class="tab tab-active transition-all duration-200"
+      >
+        All NFT
+      </a>
     </div>
     <div
-            id="nft-cards"
-            class="mx-auto px-[20px] max-w-[1170px] grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"
-    >
-    </div>
-</section>
+      id="nft-cards"
+      class="mx-auto px-[20px] max-w-[1170px] grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"
+    ></div>
+  </section>
 
-<script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js"
-        type="application/javascript"></script>
-<script
-        src="https://cdn.jsdelivr.net/npm/toastify-js"
-        type="text/javascript"
-></script>
-<script>
+  <script
+    src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js"
+    type="application/javascript"
+  ></script>
+  <script
+    src="https://cdn.jsdelivr.net/npm/toastify-js"
+    type="text/javascript"
+  ></script>
+  <script>
     const abi = [
-        "constructor(string _name, string _symbol) payable",
-        "event OwnershipTransferred(address indexed user, address indexed newOwner)",
-        "event Transfer(address indexed from, address indexed to, uint256 indexed id)",
-        "function balanceOf(address owner) view returns (uint256)",
-        "function burn(uint256 id)",
-        "function myAddr() view returns (address)",
-        "function name() view returns (string)",
-        "function owner() view returns (address)",
-        "function ownerOf(uint256 id) view returns (address owner)",
-        "function safeBatchMint(address[] to, string[] uris)",
-        "function safeMint(address to, string uri)",
-        "function supportsInterface(bytes4 interfaceId) view returns (bool)",
-        "function symbol() view returns (string)",
-        "function tokenURI(uint256 tokenId) view returns (string)",
-        "function transferOwnership(address newOwner)"
+      "constructor(string _name, string _symbol) payable",
+      "event OwnershipTransferred(address indexed user, address indexed newOwner)",
+      "event Transfer(address indexed from, address indexed to, uint256 indexed id)",
+      "function balanceOf(address owner) view returns (uint256)",
+      "function burn(uint256 id)",
+      "function myAddr() view returns (address)",
+      "function name() view returns (string)",
+      "function owner() view returns (address)",
+      "function ownerOf(uint256 id) view returns (address owner)",
+      "function safeBatchMint(address[] to, string[] uris)",
+      "function safeMint(address to, string uri)",
+      "function supportsInterface(bytes4 interfaceId) view returns (bool)",
+      "function symbol() view returns (string)",
+      "function tokenURI(uint256 tokenId) view returns (string)",
+      "function transferOwnership(address newOwner)",
     ];
 
     const contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
     const privateKey =
-        "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80";
-    let provider,
-        wallet,
-        contract;
+      "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80";
+    let provider, wallet, contract;
 
     async function connectToContract() {
-        provider = new ethers.providers.JsonRpcProvider();
-        wallet = new ethers.Wallet(privateKey, provider);
-        contract = new ethers.Contract(contractAddress, abi, wallet);
+      provider = new ethers.providers.JsonRpcProvider();
+      wallet = new ethers.Wallet(privateKey, provider);
+      contract = new ethers.Contract(contractAddress, abi, wallet);
     }
 
-    connectToContract()
-</script>
+    connectToContract();
+  </script>
 
-<script>
+  <script>
     function shortenAddress(address) {
-        if (address.length < 10) return address; // Если адрес слишком короткий, возвращаем его как есть
-        return address.slice(0, 6) + "..." + address.slice(-5); // Возвращаем сокращенный адрес
+      if (address.length < 10) return address; // Если адрес слишком короткий, возвращаем его как есть
+      return address.slice(0, 6) + "..." + address.slice(-5); // Возвращаем сокращенный адрес
     }
 
     const customCallToast = (msg) => {
-        Toastify({
-            text: msg,
-            position: "center",
-            gravity: "top",
-        }).showToast();
+      Toastify({
+        text: msg,
+        position: "center",
+        gravity: "top",
+      }).showToast();
     };
 
     let nfts = [];
     const getNfts = async () => {
-        const get_nfts = await contract.queryFilter('Transfer')
-        get_nfts.forEach(nft => {
-            nfts.push(nft.args)
-        })
-    }
+      const get_nfts = await contract.queryFilter("Transfer");
+      get_nfts.forEach((nft) => {
+        nfts.push(nft.args);
+      });
+    };
 
     const renderNfts = async () => {
-        const section = document.getElementById('nft-cards')
-        section.innerHTML = ''
-        console.log(nfts.length)
-        for (let item in nfts) {
-            const nft = nfts[item]
-            const id = nft[2]
-            try {
-                const link = await contract.tokenURI(id)
-                if (!link.startsWith('http')) {
-                    customCallToast(`Invalid link for nft with id: ${id}`)
-                    continue;
-                }
-                const res = await fetch(link)
-                const json = await res.json();
+      const section = document.getElementById("nft-cards");
+      section.innerHTML = "";
+      console.log(nfts.length);
+      for (let item in nfts) {
+        const nft = nfts[item];
+        const id = nft[2];
+        try {
+          const link = await contract.tokenURI(id);
+          if (!link.startsWith("http")) {
+            // добавил обработку соженных NFT
+            console.log(link);
+            if (!link) {
+              continue;
+            }
+            customCallToast(`Invalid link for nft with id: ${id}`);
+            continue;
+          }
+          const res = await fetch(link);
+          const json = await res.json();
 
-                const ownerAddress = await contract.ownerOf(id)
+          const ownerAddress = await contract.ownerOf(id);
 
-                section.innerHTML += `
+          section.innerHTML += `
                     <div class="card max-w-[320px] bg-base-100 shadow-xl">
                         <figure>
                             <img
-                                src="${json.image ? json.image : 'https://via.assets.so/img.jpg?w=400&h=300&tc=blue&bg=#cecece'}"
+                                src="${
+                                  json.image
+                                    ? json.image
+                                    : "https://via.assets.so/img.jpg?w=400&h=300&tc=blue&bg=#cecece"
+                                }"
                                 alt="Shoes"
                                 class="max-h-[250px] w-full object-cover"
                             />
                         </figure>
                         <div class="card-body">
-                            <h2 class="card-title">${json.name ? json.name : 'Name not defined'}</h2>
+                            <h2 class="card-title">${
+                              json.name ? json.name : "Name not defined"
+                            }</h2>
 
                             <div class="flex flex-col gap-2 text-xl font-medium">
                                 <div class="flex items-center justify-between w-full">
                                     <p>ID:</p> <p class="text-lg font-normal text-end">${id}</p>
                                 </div>
                                 <div class="flex items-center justify-between w-full">
-                                    <p>Owner:</p> <p class="text-lg font-normal text-end">${shortenAddress(ownerAddress)}</p>
+                                    <p>Owner:</p> <p class="text-lg font-normal text-end">${shortenAddress(
+                                      ownerAddress
+                                    )}</p>
                                 </div>
                             </div>
 
                             <p>
-                                ${json.description ? json.description : 'Description not found'}
+                                ${
+                                  json.description
+                                    ? json.description
+                                    : "Description not found"
+                                }
                             </p>
                         </div>
                     </div>
                 </div>
-                `
-            } catch (err) {
-                customCallToast(`Failed to withdraw nft with id: ${id}`)
-
-            }
+                `;
+        } catch (err) {
+          customCallToast(`Failed to withdraw nft with id: ${id}`);
         }
-    }
+      }
+    };
 
     setTimeout(() => {
-        getNfts().then(renderNfts)
-    }, 500)
-</script>
+      getNfts().then(renderNfts);
+    }, 500);
+  </script>
 </body>

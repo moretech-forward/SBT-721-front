@@ -13,9 +13,93 @@
   />
 
   <link href="./output.css" rel="stylesheet" />
+
+  <p id="future_address" class="hidden invisible"></p>
+  <div class="p-2 hidden invisible">
+      <div class="accordion">
+          <div class="accordion-item">
+              <section class="m-auto w-100">
+                  <h3 id="headingOne" class="accordion-header text-center">
+                      <button
+                              type="button"
+                              data-bs-toggle="collapse"
+                              data-bs-target="#collapse_myAddr"
+                              aria-expanded="true"
+                              aria-controls="collapse_myAddr"
+                              class="accordion-button collapsed"
+                      >
+                          myAddr
+                      </button>
+                  </h3>
+                  <div
+                          id="collapse_myAddr"
+                          aria-labelledby="headingOne"
+                          data-bs-parent="#accordionExample"
+                          class="accordion-collapse collapse"
+                  >
+                      <div class="accordion-body">
+                          <form id="form-myAddr" class="d-flex flex-column gap-2 p-2">
+                              <div>
+                                  <button
+                                          id="btn"
+                                          type="button"
+                                          data-form-name="myAddr"
+                                          class="btn btn-primary mt-2"
+                                  >
+                                      Read
+                                  </button>
+                              </div>
+                              <div>
+                                  <p>Response:</p>
+                                  <div>
+                                      :
+                                      <span
+                                              id="form-output-myAddr-0"
+                                              data-form-name="myAddr"
+                                              data-field-type="address"
+                                      >address</span
+                                      >
+                                      <br />
+                                  </div>
+                              </div>
+
+                              <script>
+                                  setTimeout(() => {
+                                      const element = document.getElementById("btn");
+                                      if (element) {
+                                          element.click();
+
+                                          setTimeout(() => {
+                                              const future_address =
+                                                  document.getElementById("future_address");
+                                              future_address.innerHTML = document.getElementById(
+                                                  "form-output-myAddr-0"
+                                              ).innerHTML;
+                                          }, 1000);
+                                      }
+                                  }, 1000);
+                              </script>
+                          </form>
+                      </div>
+                  </div>
+              </section>
+          </div>
+      </div>
+  </div>
+
+  <div
+          class="bg-base-100 w-full flex flex-col items-center gap-4 pt-36"
+          id="loader"
+          style="min-height: 800px"
+  >
+      <span class="loading loading-ring loading-lg text-white"></span>
+      <p class="text-white text-3xl" id="init-text"></p>
+  </div>
+
   <section
     data-theme="dark"
-    class="pt-20 flex items-center flex-col gap-10 min-h-screen bg-base-100"
+    id="content"
+    class="pt-20 flex items-center flex-col gap-10 min-h-screen bg-base-100 hidden"
   >
     <br />
     <h1 class="text-center text-3xl font-extrabold text-white">
@@ -44,6 +128,25 @@
     src="https://cdn.jsdelivr.net/npm/toastify-js"
     type="text/javascript"
   ></script>
+  <script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
+  <!--loading animation-->
+  <script>
+      const loader = document.getElementById("loader");
+      const content = document.getElementById("content");
+
+      var typed = new Typed("#init-text", {
+          strings: ["Initializing app...", "Get contract info..."],
+          typeSpeed: 30,
+          backSpeed: 0,
+      });
+
+      setTimeout(() => {
+          loader.classList.remove("flex");
+          loader.classList.add("hidden");
+
+          content.classList.remove("hidden");
+      }, 3000);
+  </script>
   <script>
     const abi = [
       "constructor(string _name, string _symbol) payable",

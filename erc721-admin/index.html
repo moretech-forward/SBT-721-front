@@ -7,6 +7,17 @@
     rel="stylesheet"
     type="text/css"
   />
+
+  <div
+    class="bg-base-100 w-full flex flex-col items-center gap-4 pt-36"
+    id="loader"
+    style="min-height: 800px"
+    data-theme="dark"
+  >
+    <span class="loading loading-ring loading-lg text-white"></span>
+    <p class="text-white text-3xl" id="init-text"></p>
+  </div>
+
   <link
     rel="stylesheet"
     type="text/css"
@@ -86,16 +97,6 @@
     </div>
   </div>
 
-  <div
-    class="bg-base-100 w-full flex flex-col items-center gap-4 pt-36"
-    id="loader"
-    style="min-height: 800px"
-    data-theme="dark"
-  >
-    <span class="loading loading-ring loading-lg text-white"></span>
-    <p class="text-white text-3xl" id="init-text"></p>
-  </div>
-
   <section
     id="content"
     data-theme="dark"
@@ -105,6 +106,35 @@
     <h1 class="text-center text-3xl font-extrabold text-white">
       Soulbound Token (ERC721) - Admin
     </h1>
+    <div class="px-10 pt-10">
+      <button class="btn" onclick="my_modal_1.showModal()">Read info</button>
+      <dialog id="my_modal_1" class="modal">
+        <div class="modal-box">
+          <b> Information about admin panel functions! </b>
+          <br />
+          <p class="py-4">
+            <b>Mint</b> - create new SBT, enter wallet address and link to
+            metadata.
+            <br />
+            <b>Burn</b> - delete existing SBTs by id.
+            <br />
+            <b>Batch Mint</b> - mass creation of several SBTs at one time, the
+            first wallet address is specified in the first line, the second
+            address - in the second line, and so on, similarly, and links to
+            metadata.
+            <br />
+            <b>Transfer ownership</b> - transfer ownership of SBT collection or
+            renounce ownership.
+          </p>
+          <div class="modal-action">
+            <form method="dialog">
+              <!-- if there is a button in form, it will close the modal -->
+              <button class="btn">Close</button>
+            </form>
+          </div>
+        </div>
+      </dialog>
+    </div>
     <div role="tablist" class="tabs tabs-boxed">
       <a
         role="tab"

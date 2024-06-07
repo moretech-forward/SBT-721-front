@@ -149,40 +149,41 @@
     let contractAddress;
     const getAddress = async () => {
       // for forward
-      // contractAddress = document.getElementById("future_address").innerHTML;
+      contractAddress = document.getElementById("future_address").innerHTML;
+      console.log("Contract:", contractAddress);
       // for forward
     };
 
     let provider, wallet, contract, address;
 
     // for tests
-    const privateKey =
-      "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80";
-    contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
+    // const privateKey =
+    //   "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80";
+    // contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
     // for tests
 
     async function connectToContract() {
       // for forward
-      // provider = new ethers.providers.Web3Provider(this.parent.ethereum);
-      // wallet = provider.getSigner();
-      // contract = new ethers.Contract(contractAddress, abi, wallet);
+      provider = new ethers.providers.Web3Provider(this.parent.ethereum);
+      wallet = provider.getSigner();
+      contract = new ethers.Contract(contractAddress, abi, wallet);
       // for forward
 
       // for tests
-      provider = new ethers.providers.JsonRpcProvider();
-      wallet = new ethers.Wallet(privateKey, provider);
-      contract = new ethers.Contract(contractAddress, abi, wallet);
+      // provider = new ethers.providers.JsonRpcProvider();
+      // wallet = new ethers.Wallet(privateKey, provider);
+      // contract = new ethers.Contract(contractAddress, abi, wallet);
       // for tests
 
       address = await wallet.getAddress();
-      console.log(address);
+      console.log("Wallet address:", address);
     }
 
     setTimeout(() => {
       getAddress();
       connectToContract();
       getCollectionName();
-    }, 100);
+    }, 2000);
 
     const getCollectionName = async () => {
       // GET COLLECTION NAME
@@ -312,6 +313,6 @@
 
     setTimeout(() => {
       mySbtTab.click();
-    }, 500);
+    }, 2200);
   </script>
 </body>

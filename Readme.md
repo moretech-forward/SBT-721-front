@@ -1,4 +1,4 @@
-# SBT721
+# SBT-721-front
 SBT721 is a unique token standard that introduces the concept of Soulbound tokens. A Soulbound token is a type of token that can only be owned and transferred by a specific address. Once a Soulbound token is created and assigned to an address, it cannot be transferred or owned by any other address.
 
 # Overview

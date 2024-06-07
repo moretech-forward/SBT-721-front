@@ -1,261 +1,384 @@
 <body id="itrf">
-<meta charset="UTF-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<link
-        href="https://cdn.jsdelivr.net/npm/daisyui@4.10.2/dist/full.min.css"
-        rel="stylesheet"
-        type="text/css"
-/>
-<link
-        href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css"
-        rel="stylesheet"
-        type="text/css"
-/>
+  <meta charset="UTF-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <link
+    href="https://cdn.jsdelivr.net/npm/daisyui@4.10.2/dist/full.min.css"
+    rel="stylesheet"
+    type="text/css"
+  />
+  <link
+    href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css"
+    rel="stylesheet"
+    type="text/css"
+  />
 
-<link href="./output.css" rel="stylesheet"/>
+  <link href="./output.css" rel="stylesheet" />
 
-<p class="hidden invisible" id="future_address"></p>
-<div class="p-2 hidden invisible">
+  <p class="hidden invisible" id="future_address"></p>
+  <div class="p-2 hidden invisible">
     <div class="accordion">
-        <div class="accordion-item">
-            <section class="m-auto w-100">
-                <h3 class="accordion-header text-center" id="headingOne">
-                    <button
-                            aria-controls="collapse_myAddr"
-                            aria-expanded="true"
-                            class="accordion-button collapsed"
-                            data-bs-target="#collapse_myAddr"
-                            data-bs-toggle="collapse"
-                            type="button"
-                    >
-                        myAddr
-                    </button>
-                </h3>
-                <div
-                        aria-labelledby="headingOne"
-                        class="accordion-collapse collapse"
-                        data-bs-parent="#accordionExample"
-                        id="collapse_myAddr"
-                >
-                    <div class="accordion-body">
-                        <form class="d-flex flex-column gap-2 p-2" id="form-myAddr">
-                            <div>
-                                <button
-                                        class="btn btn-primary mt-2"
-                                        data-form-name="myAddr"
-                                        id="btn"
-                                        type="button"
-                                >
-                                    Read
-                                </button>
-                            </div>
-                            <div>
-                                <p>Response:</p>
-                                <div>
-                                    :
-                                    <span
-                                            data-field-type="address"
-                                            data-form-name="myAddr"
-                                            id="form-output-myAddr-0"
-                                    >address</span
-                                    >
-                                    <br/>
-                                </div>
-                            </div>
-
-                            <script>
-                                setTimeout(() => {
-                                    const element = document.getElementById("btn");
-                                    if (element) {
-                                        element.click();
-
-                                        setTimeout(() => {
-                                            const future_address =
-                                                document.getElementById("future_address");
-                                            future_address.innerHTML = document.getElementById(
-                                                "form-output-myAddr-0"
-                                            ).innerHTML;
-                                        }, 1000);
-                                    }
-                                }, 1000);
-                            </script>
-                        </form>
-                    </div>
+      <div class="accordion-item">
+        <section class="m-auto w-100">
+          <h3 class="accordion-header text-center" id="headingOne">
+            <button
+              aria-controls="collapse_myAddr"
+              aria-expanded="true"
+              class="accordion-button collapsed"
+              data-bs-target="#collapse_myAddr"
+              data-bs-toggle="collapse"
+              type="button"
+            >
+              myAddr
+            </button>
+          </h3>
+          <div
+            aria-labelledby="headingOne"
+            class="accordion-collapse collapse"
+            data-bs-parent="#accordionExample"
+            id="collapse_myAddr"
+          >
+            <div class="accordion-body">
+              <form class="d-flex flex-column gap-2 p-2" id="form-myAddr">
+                <div>
+                  <button
+                    class="btn btn-primary mt-2"
+                    data-form-name="myAddr"
+                    id="btn"
+                    type="button"
+                  >
+                    Read
+                  </button>
                 </div>
-            </section>
-        </div>
-    </div>
-</div>
+                <div>
+                  <p>Response:</p>
+                  <div>
+                    :
+                    <span
+                      data-field-type="address"
+                      data-form-name="myAddr"
+                      id="form-output-myAddr-0"
+                      >address</span
+                    >
+                    <br />
+                  </div>
+                </div>
 
-<section
-        class="pt-20 flex items-center flex-col gap-10 min-h-screen bg-base-100"
-        data-theme="dark"
-        id="content"
->
-    <br/>
+                <script>
+                  setTimeout(() => {
+                    const element = document.getElementById("btn");
+                    if (element) {
+                      element.click();
+
+                      setTimeout(() => {
+                        const future_address =
+                          document.getElementById("future_address");
+                        future_address.innerHTML = document.getElementById(
+                          "form-output-myAddr-0"
+                        ).innerHTML;
+                      }, 1000);
+                    }
+                  }, 1000);
+                </script>
+              </form>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <section
+    class="pt-20 flex items-center flex-col gap-10 min-h-screen bg-base-100"
+    data-theme="dark"
+    id="content"
+  >
+    <br />
     <h1 class="text-center text-3xl font-extrabold text-white">
-        Soulbound Token (ERC721)
+      Soulbound Token (ERC721)
     </h1>
+    <h2
+      id="collection-name"
+      class="text-center text-xl font-semibold text-white"
+    ></h2>
     <div class="tabs tabs-boxed" role="tablist">
-        <a
-                class="tab tab-active transition-all duration-200"
-                id="nft-tab"
-                role="tab"
-        >
-            All NFT
-        </a>
+      <a
+        class="tab tab-active transition-all duration-200"
+        id="my-sbt-tab"
+        role="tab"
+      >
+        My SBT
+      </a>
+      <a class="tab transition-all duration-200" id="all-sbt-tab" role="tab">
+        All SBT
+      </a>
     </div>
     <div
-            class="mx-auto px-[20px] max-w-[1170px] grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"
-            id="nft-cards"
+      class="mx-auto px-[20px] max-w-[1170px] grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"
+      id="nft-cards"
     ></div>
-</section>
+  </section>
 
-<script
-        src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js"
-        type="application/javascript"
-></script>
-<script
-        src="https://cdn.jsdelivr.net/npm/toastify-js"
-        type="text/javascript"
-></script>
-<script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
-<script>
+  <script
+    src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js"
+    type="application/javascript"
+  ></script>
+  <script
+    src="https://cdn.jsdelivr.net/npm/toastify-js"
+    type="text/javascript"
+  ></script>
+  <script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
+  <script>
     const abi = [
-        "constructor(string _name, string _symbol) payable",
-        "event OwnershipTransferred(address indexed user, address indexed newOwner)",
-        "event Transfer(address indexed from, address indexed to, uint256 indexed id)",
-        "function balanceOf(address owner) view returns (uint256)",
-        "function burn(uint256 id)",
-        "function myAddr() view returns (address)",
-        "function name() view returns (string)",
-        "function owner() view returns (address)",
-        "function ownerOf(uint256 id) view returns (address owner)",
-        "function safeBatchMint(address[] to, string[] uris)",
-        "function safeMint(address to, string uri)",
-        "function supportsInterface(bytes4 interfaceId) view returns (bool)",
-        "function symbol() view returns (string)",
-        "function tokenURI(uint256 tokenId) view returns (string)",
-        "function transferOwnership(address newOwner)",
+      "constructor(string _name, string _symbol) payable",
+      "event OwnershipTransferred(address indexed user, address indexed newOwner)",
+      "event Transfer(address indexed from, address indexed to, uint256 indexed id)",
+      "function balanceOf(address owner) view returns (uint256)",
+      "function burn(uint256 id)",
+      "function myAddr() view returns (address)",
+      "function name() view returns (string)",
+      "function owner() view returns (address)",
+      "function ownerOf(uint256 id) view returns (address owner)",
+      "function safeBatchMint(address[] to, string[] uris)",
+      "function safeMint(address to, string uri)",
+      "function supportsInterface(bytes4 interfaceId) view returns (bool)",
+      "function symbol() view returns (string)",
+      "function tokenURI(uint256 tokenId) view returns (string)",
+      "function transferOwnership(address newOwner)",
     ];
 
     let contractAddress;
     const getAddress = async () => {
-        contractAddress = document.getElementById("future_address").innerHTML;
+      // for forward
+      contractAddress = document.getElementById("future_address").innerHTML;
+      // for forward
     };
 
-    let provider;
-    let wallet;
-    let contract;
+    let provider, wallet, contract, address;
+
+    // for tests
+    // const privateKey =
+    //   "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80";
+    // contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
+    // for tests
 
     async function connectToContract() {
-        provider = new ethers.providers.Web3Provider(this.parent.ethereum);
-        wallet = provider.getSigner();
-        contract = new ethers.Contract(contractAddress, abi, wallet);
-        // provider = new ethers.providers.JsonRpcProvider();
-        // wallet = new ethers.Wallet(privateKey, provider);
-        // contract = new ethers.Contract(contractAddress, abi, wallet);
+      // for forward
+      provider = new ethers.providers.Web3Provider(this.parent.ethereum);
+      wallet = provider.getSigner();
+      contract = new ethers.Contract(contractAddress, abi, wallet);
+      // for forward
+
+      // for tests
+      //   provider = new ethers.providers.JsonRpcProvider();
+      //   wallet = new ethers.Wallet(privateKey, provider);
+      //   contract = new ethers.Contract(contractAddress, abi, wallet);
+      // for tests
+
+      address = await wallet.getAddress();
+      console.log(address);
     }
 
     setTimeout(() => {
-        getAddress();
-        connectToContract();
-    }, 2100);
-</script>
+      getAddress();
+      connectToContract();
+      getCollectionName();
+    }, 100);
 
-<script>
+    const getCollectionName = async () => {
+      // GET COLLECTION NAME
+      const collectionName = await contract.name();
+      const collectionSymbol = await contract.symbol();
+      document.getElementById("collection-name").innerText =
+        collectionName + " (" + collectionSymbol + ")";
+    };
+
     function shortenAddress(address) {
-        if (address.length < 10) return address; // Если адрес слишком короткий, возвращаем его как есть
-        return address.slice(0, 6) + "..." + address.slice(-5); // Возвращаем сокращенный адрес
+      if (address.length < 10) return address;
+      return address.slice(0, 6) + "..." + address.slice(-5);
     }
 
     const customCallToast = (msg) => {
-        Toastify({
-            text: msg,
-            position: "center",
-            gravity: "top",
-        }).showToast();
+      Toastify({
+        text: msg,
+        position: "center",
+        gravity: "top",
+      }).showToast();
     };
 
     let nfts = [];
     const getNfts = async () => {
-        const get_nfts = await contract.queryFilter("Transfer");
-        get_nfts.forEach((nft) => {
-            nfts.push(nft.args);
-        });
+      nfts.length = 0;
+      const get_nfts = await contract.queryFilter("Transfer");
+      get_nfts.forEach((nft) => {
+        nfts.push(nft.args);
+      });
     };
 
     const renderNfts = async () => {
-        const section = document.getElementById("nft-cards");
-        section.innerHTML = "";
-        console.log(nfts.length);
-        for (let item in nfts) {
-            const nft = nfts[item];
-            const id = nft[2];
-            try {
-                const link = await contract.tokenURI(id);
-                if (!link.startsWith("http")) {
-                    // добавил обработку соженных NFT
-                    console.log(link);
-                    if (!link) {
-                        continue;
-                    }
-                    customCallToast(`Invalid link for nft with id: ${id}`);
-                    continue;
-                }
-                const res = await fetch(link);
-                const json = await res.json();
-
-                const ownerAddress = await contract.ownerOf(id);
-
-                section.innerHTML += `
-                    <div class="card max-w-[320px] bg-base-100 shadow-xl">
-                        <figure>
-                            <img
-                                src="${
-                    json.image
-                        ? json.image
-                        : "https://via.assets.so/img.jpg?w=400&h=300&tc=blue&bg=#cecece"
-                }"
-                                alt="Shoes"
-                                class="max-h-[250px] w-full object-cover"
-                            />
-                        </figure>
-                        <div class="card-body">
-                            <h2 class="card-title">${
-                    json.name ? json.name : "Name not defined"
-                }</h2>
-
-                            <div class="flex flex-col gap-2 text-xl font-medium">
-                                <div class="flex items-center justify-between w-full">
-                                    <p>ID:</p> <p class="text-lg font-normal text-end">${id}</p>
-                                </div>
-                                <div class="flex items-center justify-between w-full">
-                                    <p>Owner:</p> <p class="text-lg font-normal text-end">${shortenAddress(
-                    ownerAddress
-                )}</p>
-                                </div>
-                            </div>
-
-                            <p>
-                                ${
-                    json.description
-                        ? json.description
-                        : "Description not found"
-                }
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                `;
-            } catch (err) {
-                customCallToast(`Failed to withdraw nft with id: ${id}`);
+      const section = document.getElementById("nft-cards");
+      section.innerHTML = "";
+      console.log(nfts.length);
+      for (let item in nfts) {
+        const nft = nfts[item];
+        const id = nft[2];
+        try {
+          const link = await contract.tokenURI(id);
+          if (!link.startsWith("http")) {
+            console.log(link);
+            if (!link) {
+              continue;
             }
+            customCallToast(`Invalid link for nft with id: ${id}`);
+            continue;
+          }
+          const res = await fetch(link);
+          const json = await res.json();
+
+          const ownerAddress = await contract.ownerOf(id);
+
+          section.innerHTML += `
+                      <div class="card max-w-[320px] bg-base-100 shadow-xl">
+                          <figure>
+                              <img
+                                  src="${
+                                    json.image
+                                      ? json.image
+                                      : "https://via.assets.so/img.jpg?w=400&h=300&tc=blue&bg=#cecece"
+                                  }"
+                                  alt="Shoes"
+                                  class="max-h-[250px] w-full object-cover"
+                              />
+                          </figure>
+                          <div class="card-body">
+                              <h2 class="card-title">${
+                                json.name ? json.name : "Name not defined"
+                              }</h2>
+
+                              <div class="flex flex-col gap-2 text-xl font-medium">
+                                  <div class="flex items-center justify-between w-full">
+                                      <p>ID:</p> <p class="text-lg font-normal text-end">${id}</p>
+                                  </div>
+                                  <div class="flex items-center justify-between w-full">
+                                      <p>Owner:</p> <p class="text-lg font-normal text-end">${shortenAddress(
+                                        ownerAddress
+                                      )}</p>
+                                  </div>
+                              </div>
+
+                              <p>
+                                  ${
+                                    json.description
+                                      ? json.description
+                                      : "Description not found"
+                                  }
+                              </p>
+                          </div>
+                      </div>
+                  `;
+        } catch (err) {
+          customCallToast(`Failed to withdraw nft with id: ${id}`);
         }
+      }
     };
 
+    const getMyNfts = async (myAddress) => {
+      nfts.length = 0;
+      const transferEvents = await contract.queryFilter("Transfer");
+
+      transferEvents.forEach((event) => {
+        const toAddress = event.args[1];
+
+        if (toAddress === myAddress) {
+          nfts.push(event.args);
+        }
+      });
+    };
+
+    const renderMyNfts = async () => {
+      const section = document.getElementById("nft-cards");
+      section.innerHTML = "";
+      console.log(nfts.length);
+      for (let item in nfts) {
+        const nft = nfts[item];
+        const id = nft[2];
+        try {
+          const link = await contract.tokenURI(id);
+          if (!link.startsWith("http")) {
+            console.log(link);
+            if (!link) {
+              continue;
+            }
+            customCallToast(`Invalid link for nft with id: ${id}`);
+            continue;
+          }
+          const res = await fetch(link);
+          const json = await res.json();
+
+          const ownerAddress = await contract.ownerOf(id);
+
+          section.innerHTML += `
+                      <div class="card max-w-[320px] bg-base-100 shadow-xl">
+                          <figure>
+                              <img
+                                  src="${
+                                    json.image
+                                      ? json.image
+                                      : "https://via.assets.so/img.jpg?w=400&h=300&tc=blue&bg=#cecece"
+                                  }"
+                                  alt="Shoes"
+                                  class="max-h-[250px] w-full object-cover"
+                              />
+                          </figure>
+                          <div class="card-body">
+                              <h2 class="card-title">${
+                                json.name ? json.name : "Name not defined"
+                              }</h2>
+
+                              <div class="flex flex-col gap-2 text-xl font-medium">
+                                  <div class="flex items-center justify-between w-full">
+                                      <p>ID:</p> <p class="text-lg font-normal text-end">${id}</p>
+                                  </div>
+                                  <div class="flex items-center justify-between w-full">
+                                      <p>Owner:</p> <p class="text-lg font-normal text-end">${shortenAddress(
+                                        ownerAddress
+                                      )}</p>
+                                  </div>
+                              </div>
+
+                              <p>
+                                  ${
+                                    json.description
+                                      ? json.description
+                                      : "Description not found"
+                                  }
+                              </p>
+                          </div>
+                      </div>
+                  `;
+        } catch (err) {
+          customCallToast(`Failed to withdraw nft with id: ${id}`);
+        }
+      }
+    };
+
+    // TAB SWITCHING LOGIC
+    const mySbtTab = document.getElementById("my-sbt-tab");
+    const allSbtTab = document.getElementById("all-sbt-tab");
+
+    mySbtTab.addEventListener("click", () => {
+      mySbtTab.classList.add("tab-active");
+      allSbtTab.classList.remove("tab-active");
+      getMyNfts(address).then(renderMyNfts);
+    });
+
+    allSbtTab.addEventListener("click", () => {
+      allSbtTab.classList.add("tab-active");
+      mySbtTab.classList.remove("tab-active");
+      getNfts().then(renderNfts);
+    });
+
     setTimeout(() => {
-        getNfts().then(renderNfts);
-    }, 3000);
-</script>
+      mySbtTab.click();
+    }, 500);
+  </script>
 </body>

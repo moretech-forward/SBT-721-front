@@ -1,496 +1,370 @@
 <body id="itrf">
-<meta charset="UTF-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<link href="./build.css" rel="stylesheet"/>
-<link
-        href="https://cdn.jsdelivr.net/npm/daisyui@4.10.3/dist/full.min.css"
-        rel="stylesheet"
-        type="text/css"
-/>
+  <meta charset="UTF-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <link href="./build.css" rel="stylesheet" />
+  <link
+    href="https://cdn.jsdelivr.net/npm/daisyui@4.10.3/dist/full.min.css"
+    rel="stylesheet"
+    type="text/css"
+  />
+  <link
+    href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css"
+    rel="stylesheet"
+    type="text/css"
+  />
 
-<link
-        href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css"
-        rel="stylesheet"
-        type="text/css"
-/>
-
-<p class="hidden invisible" id="future_address"></p>
-<div class="p-2 hidden invisible">
+  <p class="hidden invisible" id="future_address"></p>
+  <div class="p-2 hidden invisible">
     <div class="accordion">
-        <div class="accordion-item">
-            <section class="m-auto w-100">
-                <h3 class="accordion-header text-center" id="headingOne">
-                    <button
-                            aria-controls="collapse_myAddr"
-                            aria-expanded="true"
-                            class="accordion-button collapsed"
-                            data-bs-target="#collapse_myAddr"
-                            data-bs-toggle="collapse"
-                            type="button"
+      <div class="accordion-item">
+        <section class="m-auto w-100">
+          <h3 class="accordion-header text-center" id="headingOne">
+            <button
+              aria-controls="collapse_myAddr"
+              aria-expanded="true"
+              class="accordion-button collapsed"
+              data-bs-target="#collapse_myAddr"
+              data-bs-toggle="collapse"
+              type="button"
+            >
+              myAddr
+            </button>
+          </h3>
+          <div
+            aria-labelledby="headingOne"
+            class="accordion-collapse collapse"
+            data-bs-parent="#accordionExample"
+            id="collapse_myAddr"
+          >
+            <div class="accordion-body">
+              <form class="d-flex flex-column gap-2 p-2" id="form-myAddr">
+                <div>
+                  <button
+                    class="btn btn-primary mt-2"
+                    data-form-name="myAddr"
+                    id="btn"
+                    type="button"
+                  >
+                    Read
+                  </button>
+                </div>
+                <div>
+                  <p>Response:</p>
+                  <div>
+                    :
+                    <span
+                      data-field-type="address"
+                      data-form-name="myAddr"
+                      id="form-output-myAddr-0"
+                      >address</span
                     >
-                        myAddr
-                    </button>
-                </h3>
-                <div
-                        aria-labelledby="headingOne"
-                        class="accordion-collapse collapse"
-                        data-bs-parent="#accordionExample"
-                        id="collapse_myAddr"
-                >
-                    <div class="accordion-body">
-                        <form class="d-flex flex-column gap-2 p-2" id="form-myAddr">
-                            <div>
-                                <button
-                                        class="btn btn-primary mt-2"
-                                        data-form-name="myAddr"
-                                        id="btn"
-                                        type="button"
-                                >
-                                    Read
-                                </button>
-                            </div>
-                            <div>
-                                <p>Response:</p>
-                                <div>
-                                    :
-                                    <span
-                                            data-field-type="address"
-                                            data-form-name="myAddr"
-                                            id="form-output-myAddr-0"
-                                    >address</span
-                                    >
-                                    <br/>
-                                </div>
-                            </div>
-
-                            <script>
-                                setTimeout(() => {
-                                    const element = document.getElementById("btn");
-                                    if (element) {
-                                        element.click();
-
-                                        setTimeout(() => {
-                                            const future_address =
-                                                document.getElementById("future_address");
-                                            future_address.innerHTML = document.getElementById(
-                                                "form-output-myAddr-0"
-                                            ).innerHTML;
-                                        }, 1000);
-                                    }
-                                }, 1000);
-                            </script>
-                        </form>
-                    </div>
+                    <br />
+                  </div>
                 </div>
-            </section>
-        </div>
-    </div>
-</div>
 
-<section
-        class="pt-20 items-center flex-col gap-10 bg-base-100 flex"
-        data-theme="dark"
-        id="content"
-        style="height: 1000px"
->
-    <h1 class="text-center text-3xl font-extrabold text-white">
-        Soulbound Token (ERC721) - Admin
-    </h1>
-    <div class="px-10 pt-10">
-        <button class="btn" onclick="my_modal_1.showModal()">Read info</button>
-        <dialog class="modal" id="my_modal_1">
-            <div class="modal-box">
-                <b> Information about admin panel functions! </b>
-                <br/>
-                <p class="py-4">
-                    <b>Mint</b> - create new SBT, enter wallet address and link to
-                    metadata.
-                    <br/>
-                    <b>Burn</b> - delete existing SBTs by id.
-                    <br/>
-                    <b>Batch Mint</b> - mass creation of several SBTs at one time, the
-                    first wallet address is specified in the first line, the second
-                    address - in the second line, and so on, similarly, and links to
-                    metadata.
-                    <br/>
-                    <b>Transfer ownership</b> - transfer ownership of SBT collection or
-                    renounce ownership.
-                </p>
-                <div class="modal-action">
-                    <form method="dialog">
-                        <!-- if there is a button in form, it will close the modal -->
-                        <button class="btn">Close</button>
-                    </form>
-                </div>
+                <script>
+                  setTimeout(() => {
+                    const element = document.getElementById("btn");
+                    if (element) {
+                      element.click();
+
+                      setTimeout(() => {
+                        const future_address =
+                          document.getElementById("future_address");
+                        future_address.innerHTML = document.getElementById(
+                          "form-output-myAddr-0"
+                        ).innerHTML;
+                      }, 1000);
+                    }
+                  }, 1000);
+                </script>
+              </form>
             </div>
-        </dialog>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <section
+    class="pt-20 items-center flex-col gap-10 bg-base-100 flex"
+    data-theme="dark"
+    id="content"
+    style="height: 1000px"
+  >
+    <h1 class="text-center text-3xl font-extrabold text-white">
+      Soulbound Token (ERC721) - Admin
+    </h1>
+    <h2
+      id="collection-name"
+      class="text-center text-xl font-semibold text-white"
+    ></h2>
+    <div class="px-10 pt-10">
+      <button class="btn" onclick="my_modal_1.showModal()">Read info</button>
+      <dialog class="modal" id="my_modal_1">
+        <div class="modal-box">
+          <b> Information about admin panel functions! </b>
+          <br />
+          <p class="py-4">
+            <b>Mint</b> - create new SBT, enter wallet address and link to
+            metadata.
+            <br />
+            <b>Burn</b> - delete existing SBTs by id.
+            <br />
+            <b>Transfer ownership</b> - transfer ownership of SBT collection or
+            renounce ownership.
+          </p>
+          <div class="modal-action">
+            <form method="dialog">
+              <!-- if there is a button in form, it will close the modal -->
+              <button class="btn">Close</button>
+            </form>
+          </div>
+        </div>
+      </dialog>
     </div>
     <div class="tabs tabs-boxed" role="tablist">
-        <a
-                class="tab tab-active transition-all duration-200"
-                id="mint-tab"
-                role="tab"
-        >
-            Mint
-        </a>
-        <a class="tab transition-all duration-200" id="burn-tab" role="tab">
-            Burn
-        </a>
-        <a class="tab transition-all duration-200" id="batch-tab" role="tab">
-            Batch Mint
-        </a>
-        <a class="tab transition-all duration-200" id="transfer-tab" role="tab">
-            Transfer ownership
-        </a>
+      <a
+        class="tab tab-active transition-all duration-200"
+        id="mint-tab"
+        role="tab"
+        >Mint</a
+      >
+      <a class="tab transition-all duration-200" id="burn-tab" role="tab"
+        >Burn</a
+      >
+      <a class="tab transition-all duration-200" id="transfer-tab" role="tab"
+        >Transfer ownership</a
+      >
     </div>
     <div class="custom-card card w-96 bg-base-100 shadow-xl" id="tab-1">
-        <form class="card-body flex flex-col space-y-4" id="mint_form">
-            <div class="flex flex-col gap-2">
-                <label for="wallet_address">Wallet address</label>
-                <input
-                        class="input input-bordered w-full max-w-xs"
-                        id="wallet_address"
-                        name="wallet_address"
-                        placeholder="Enter address"
-                        required
-                        type="text"
-                />
-            </div>
-            <div class="flex flex-col gap-2">
-                <label for="metadata_link">Metadata Link</label>
-                <input
-                        class="input input-bordered w-full max-w-xs"
-                        id="metadata_link"
-                        name="metadata_link"
-                        placeholder="Enter metadata link"
-                        required
-                        type="text"
-                />
-            </div>
-            <button class="btn btn-primary">Mint</button>
-        </form>
+      <form class="card-body flex flex-col space-y-4" id="mint_form">
+        <div class="flex flex-col gap-2">
+          <label for="wallet_address">Wallet address</label>
+          <input
+            class="input input-bordered w-full max-w-xs"
+            id="wallet_address"
+            name="wallet_address"
+            placeholder="Enter address"
+            required
+            type="text"
+          />
+        </div>
+        <div class="flex flex-col gap-2">
+          <label for="metadata_link">Metadata Link</label>
+          <input
+            class="input input-bordered w-full max-w-xs"
+            id="metadata_link"
+            name="metadata_link"
+            placeholder="Enter metadata link"
+            required
+            type="text"
+          />
+        </div>
+        <button class="btn btn-primary">Mint</button>
+      </form>
     </div>
 
     <div class="custom-card w-96 bg-base-100 shadow-xl hidden" id="tab-2">
-        <form class="card-body flex flex-col space-y-4" id="burn_form">
-            <div class="flex flex-col gap-2">
-                <label for="id">ID</label>
-                <input
-                        class="input input-bordered w-full max-w-xs"
-                        id="id"
-                        name="id"
-                        placeholder="Enter id to burn"
-                        required
-                        type="number"
-                />
-            </div>
-            <button class="btn btn-primary">Burn</button>
-        </form>
+      <form class="card-body flex flex-col space-y-4" id="burn_form">
+        <div class="flex flex-col gap-2">
+          <label for="id">ID</label>
+          <input
+            class="input input-bordered w-full max-w-xs"
+            id="id"
+            name="id"
+            placeholder="Enter id to burn"
+            required
+            type="number"
+          />
+        </div>
+        <button class="btn btn-primary">Burn</button>
+      </form>
     </div>
 
     <div class="custom-card w-96 bg-base-100 shadow-xl hidden" id="tab-3">
-        <form class="card-body flex flex-col space-y-4" id="batch_form">
-            <div class="flex flex-col gap-2">
-                <div class="flex flex-col gap-2">
-                    <label for="id">Addresses</label>
-                    <textarea
-                            class="textarea textarea-bordered min-h-36 max-h-96"
-                            id="addresses"
-                            name="addresses"
-                            placeholder="Enter your addresses"
-                    ></textarea>
-                </div>
-                <label for="metadata_uri">Metadata Links</label>
-                <textarea
-                        class="textarea textarea-bordered min-h-36 max-h-96"
-                        id="metadata_uri"
-                        name="metadata_uri"
-                        placeholder="Enter metadata links"
-                ></textarea>
-            </div>
-            <button class="btn btn-primary">Batch</button>
-        </form>
+      <form class="card-body flex flex-col space-y-4" id="transfer_ownership">
+        <div class="flex flex-col gap-2">
+          <label for="t_ownership"
+            >Enter the address to whom you want to transfer ownership or leave
+            blank to block access permanently (renounce ownership)</label
+          >
+          <input
+            class="input input-bordered w-full max-w-xs"
+            id="t_ownership"
+            name="t_ownership"
+            placeholder="Enter address or leave blank"
+            type="text"
+          />
+        </div>
+        <button class="btn btn-primary">Transfer ownership</button>
+      </form>
     </div>
+  </section>
 
-    <div class="custom-card w-96 bg-base-100 shadow-xl hidden" id="tab-4">
-        <form class="card-body flex flex-col space-y-4" id="transfer_ownership">
-            <div class="flex flex-col gap-2">
-                <label for="t_ownership"
-                >Enter the address to whom you want to transfer ownership or leave
-                    blank to block access permanently (renounce ownership)</label
-                >
-                <input
-                        class="input input-bordered w-full max-w-xs"
-                        id="t_ownership"
-                        name="t_ownership"
-                        placeholder="Enter address or leave blank"
-                        type="text"
-                />
-            </div>
-            <button class="btn btn-primary">Transfer ownership</button>
-        </form>
-    </div>
-</section>
+  <script>
+    const abi = [
+      "constructor(string _name, string _symbol) payable",
+      "event OwnershipTransferred(address indexed user, address indexed newOwner)",
+      "event Transfer(address indexed from, address indexed to, uint256 indexed id)",
+      "function balanceOf(address owner) view returns (uint256)",
+      "function burn(uint256 id)",
+      "function myAddr() view returns (address)",
+      "function name() view returns (string)",
+      "function owner() view returns (address)",
+      "function ownerOf(uint256 id) view returns (address owner)",
+      "function safeMint(address to, string uri)",
+      "function supportsInterface(bytes4 interfaceId) view returns (bool)",
+      "function symbol() view returns (string)",
+      "function tokenURI(uint256 tokenId) view returns (string)",
+      "function transferOwnership(address newOwner)",
+    ];
 
-<script>
+    let contractAddress;
+    const getAddress = async () => {
+      // for forward
+      contractAddress = document.getElementById("future_address").innerHTML;
+      // for forward
+    };
+
+    let provider, wallet, contract;
+    // for test
+    // const privateKey =
+    //   "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80";
+    // contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
+    // for test
+
+    async function connectToContract() {
+      // for forward
+      provider = new ethers.providers.Web3Provider(this.parent.ethereum);
+      wallet = provider.getSigner();
+      contract = new ethers.Contract(contractAddress, abi, wallet);
+      // for forward
+      // for test
+      //   provider = new ethers.providers.JsonRpcProvider();
+      //   wallet = new ethers.Wallet(privateKey, provider);
+      //   contract = new ethers.Contract(contractAddress, abi, wallet);
+      // for test
+    }
+
+    setTimeout(() => {
+      getAddress();
+      connectToContract();
+      getCollectionName();
+    }, 1100);
+
+    const getCollectionName = async () => {
+      const collectionName = await contract.name();
+      const collectionSymbol = await contract.symbol();
+      document.getElementById(
+        "collection-name"
+      ).innerText = `${collectionName} (${collectionSymbol})`;
+    };
+
     const tabs = document.querySelectorAll(".tab");
     const cards = document.querySelectorAll(".custom-card");
 
     tabs.forEach((tab, index) => {
-        tab.addEventListener("click", () => {
-            // Remove 'tab-active' class from all tabs
-            tabs.forEach((tab) => tab.classList.remove("tab-active"));
-            // Add 'tab-active' class to the clicked tab
-            tab.classList.add("tab-active");
+      tab.addEventListener("click", () => {
+        tabs.forEach((tab) => tab.classList.remove("tab-active"));
+        tab.classList.add("tab-active");
 
-            // Hide all cards
-            cards.forEach((card) => {
-                card.classList.add("hidden");
-                card.classList.remove("card");
-            });
-            // Show the corresponding card (index + 1 because index is 0-based)
-            document.getElementById(`tab-${index + 1}`).classList.remove("hidden");
-            document.getElementById(`tab-${index + 1}`).classList.add("card");
+        cards.forEach((card) => {
+          card.classList.add("hidden");
+          card.classList.remove("card");
         });
+
+        document.getElementById(`tab-${index + 1}`).classList.remove("hidden");
+        document.getElementById(`tab-${index + 1}`).classList.add("card");
+      });
     });
-</script>
-<script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
 
-<script
-        src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js"
-        type="application/javascript"
-></script>
-
-<script>
-    const abi = [
-        "constructor(string _name, string _symbol) payable",
-        "event OwnershipTransferred(address indexed user, address indexed newOwner)",
-        "event Transfer(address indexed from, address indexed to, uint256 indexed id)",
-        "function balanceOf(address owner) view returns (uint256)",
-        "function burn(uint256 id)",
-        "function myAddr() view returns (address)",
-        "function name() view returns (string)",
-        "function owner() view returns (address)",
-        "function ownerOf(uint256 id) view returns (address owner)",
-        "function safeBatchMint(address[] to, string[] uris)",
-        "function safeMint(address to, string uri)",
-        "function supportsInterface(bytes4 interfaceId) view returns (bool)",
-        "function symbol() view returns (string)",
-        "function tokenURI(uint256 tokenId) view returns (string)",
-        "function transferOwnership(address newOwner)",
-    ];
-    // const privateKey =
-    //   "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80";
-    // let contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
-    let contractAddress;
-    const getAddress = async () => {
-        contractAddress = document.getElementById("future_address").innerHTML;
-    };
-
-    let provider;
-    let wallet;
-    let contract;
-
-    async function connectToContract() {
-        provider = new ethers.providers.Web3Provider(this.parent.ethereum);
-        wallet = provider.getSigner();
-        contract = new ethers.Contract(contractAddress, abi, wallet);
-        // provider = new ethers.providers.JsonRpcProvider();
-        // wallet = new ethers.Wallet(privateKey, provider);
-        // contract = new ethers.Contract(contractAddress, abi, wallet);
-    }
-
-    setTimeout(() => {
-        getAddress();
-        connectToContract();
-    }, 2100);
-</script>
-<script
-        src="https://cdn.jsdelivr.net/npm/toastify-js"
-        type="text/javascript"
-></script>
-<script>
     const mintForm = document.getElementById("mint_form");
     const burnForm = document.getElementById("burn_form");
-    const batchForm = document.getElementById("batch_form");
     const transferOwnership = document.getElementById("transfer_ownership");
 
-    transferOwnership.addEventListener("submit", async (event) => {
-        event.preventDefault();
-        let error = false;
-        const formData = new FormData(transferOwnership);
-        const to = formData.get("t_ownership");
+    const showToast = (message, className = "info") => {
+      Toastify({
+        text: message,
+        className,
+        position: "right",
+        gravity: "top",
+      }).showToast();
+    };
 
+    const validateAddress = (address) => /^0x[a-fA-F0-9]{40}$/.test(address);
+
+    transferOwnership.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const formData = new FormData(transferOwnership);
+      const to = formData.get("t_ownership");
+
+      try {
         if (!to) {
-            // ничего не ввел
-            try {
-                await contract.transferOwnership(
-                    "0x0000000000000000000000000000000000000000"
-                );
-                console.log(await connectContract.owner());
-                Toastify({
-                    text: `Success transferOwnership to null address!`,
-                    position: "right",
-                    gravity: "top",
-                }).showToast();
-            } catch (e) {
-                console.log(e);
-                Toastify({
-                    text: `Error call transferOwnership!`,
-                    position: "right",
-                    gravity: "top",
-                }).showToast();
-            }
+          await contract.transferOwnership(
+            "0x0000000000000000000000000000000000000000"
+          );
+          showToast("Success transferOwnership to null address!");
+        } else if (validateAddress(to)) {
+          await contract.transferOwnership(to);
+          showToast("Success transferOwnership!");
         } else {
-            if (!/^0x[a-fA-F0-9]{40}$/.test(to)) {
-                Toastify({
-                    text: `Wrong address: ${to}`,
-                    position: "right",
-                    gravity: "top",
-                }).showToast();
-            }
-            console.log(await contract.owner());
-            error = true;
-            if (!error) {
-                try {
-                    await contract.transferOwnership(to);
-                    Toastify({
-                        text: `Success transferOwnership!`,
-                        position: "right",
-                        gravity: "top",
-                    }).showToast();
-                    console.log(await contract.owner());
-                    transferOwnership.reset();
-                } catch (e) {
-                    console.log(e);
-                    Toastify({
-                        text: `Error call transferOwnership!`,
-                        position: "right",
-                        gravity: "top",
-                    }).showToast();
-                }
-            }
+          showToast(`Wrong address: ${to}`, "error");
         }
+      } catch (e) {
+        console.error(e);
+        showToast("Error call transferOwnership!", "error");
+      }
+
+      transferOwnership.reset();
     });
 
     mintForm.addEventListener("submit", async (event) => {
-        event.preventDefault();
-        let error = false;
-        const formData = new FormData(mintForm);
-        const uri = formData.get("metadata_link");
-        const to = formData.get("wallet_address");
+      event.preventDefault();
+      const formData = new FormData(mintForm);
+      const to = formData.get("wallet_address");
+      const uri = formData.get("metadata_link");
 
-        if (!/^0x[a-fA-F0-9]{40}$/.test(to)) {
-            Toastify({
-                text: `Wrong address: ${to}`,
-                className: "error",
-                position: "right",
-                gravity: "top",
-            }).showToast();
-            error = true;
-        }
-        if (!error) {
-            try {
-                await contract.safeMint(to, uri);
-                mintForm.reset();
-                Toastify({
-                    text: `Successfull mint!`,
-                    position: "right",
-                    gravity: "top",
-                }).showToast();
-            } catch (e) {
-                console.log(e);
-                Toastify({
-                    text: `Error call safeMint`,
-                    position: "right",
-                    gravity: "top",
-                }).showToast();
-            }
-        }
+      if (!validateAddress(to)) {
+        showToast(`Wrong address: ${to}`, "error");
+        return;
+      }
+
+      try {
+        await contract.safeMint(to, uri);
+        showToast("Successfully minted!");
+      } catch (e) {
+        console.error(e);
+        showToast("Error call safeMint", "error");
+      }
+
+      mintForm.reset();
     });
 
-    // сжигает в локалке
     burnForm.addEventListener("submit", async (event) => {
-        event.preventDefault();
-        const formData = new FormData(burnForm);
-        const id = formData.get("id");
+      event.preventDefault();
+      const formData = new FormData(burnForm);
+      const id = formData.get("id");
 
-        try {
-            await contract.burn(id);
-            burnForm.reset();
-            Toastify({
-                text: `Successfull burn!`,
-                position: "right",
-                gravity: "top",
-            }).showToast();
-        } catch (e) {
-            console.log(e);
-            Toastify({
-                text: `Error call burn!`,
-                position: "right",
-                gravity: "top",
-            }).showToast();
-        }
+      try {
+        await contract.burn(id);
+
+        showToast("Successfully burned!");
+      } catch (e) {
+        console.error(e);
+        showToast("Error call burn!", "error");
+      }
+
+      burnForm.reset();
     });
-
-    batchForm.addEventListener("submit", async (event) => {
-        event.preventDefault();
-        let error = false;
-        const formData = new FormData(batchForm);
-        let walletsData = formData.get("addresses");
-        const walletsArray = walletsData
-            .split("\n")
-            .map((wallet) => wallet.trim())
-            .filter((wallet) => wallet.trim() !== "");
-
-        const metadata_links = formData.get("metadata_uri");
-        const urisArray = metadata_links
-            .split("\n")
-            .map((uri) => uri.trim())
-            .filter((uri) => uri.trim() !== "");
-
-        walletsArray.forEach((wallet, index) => {
-            if (!/^0x[a-fA-F0-9]{40}$/.test(wallet)) {
-                Toastify({
-                    text: `Wrong address: ${wallet}`,
-                    className: "error",
-                    position: "right",
-                    gravity: "top",
-                }).showToast();
-                error = true;
-            }
-        });
-
-        //const uniqueUrisArray = Array.from(new Set(urisArray)); // без дубликатов массив
-        //const uniqueWalletsArray = Array.from(new Set(walletsArray)); // без дубликатов массив
-
-        if (walletsArray.length != urisArray.length) {
-            Toastify({
-                text: `The number of addresses and links did not match! Check again, there may be duplicates!`,
-                position: "right",
-                gravity: "top",
-            }).showToast();
-            error = true;
-        }
-
-        if (!error) {
-            try {
-                await contract.safeBatchMint(walletsArray, urisArray);
-                batchForm.reset();
-                Toastify({
-                    text: `Mint successful!`,
-                    position: "right",
-                    gravity: "top",
-                }).showToast();
-            } catch (e) {
-                console.log(e);
-                Toastify({
-                    text: `Error call safeBatchMint`,
-                    position: "right",
-                    gravity: "top",
-                }).showToast();
-            }
-        }
-    });
-</script>
+  </script>
+  <script
+    src="https://cdn.jsdelivr.net/npm/toastify-js"
+    type="text/javascript"
+  ></script>
+  <script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
+  <script
+    src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js"
+    type="application/javascript"
+  ></script>
 </body>

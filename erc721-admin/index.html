@@ -252,7 +252,7 @@
       getAddress();
       connectToContract();
       getCollectionName();
-    }, 2100);
+    }, 2200);
 
     const getCollectionName = async () => {
       const collectionName = await contract.name();
@@ -309,14 +309,17 @@
           console.log(receipt);
           showToast("Success transferOwnership to null address!");
         } else if (validateAddress(to)) {
-          await contract.transferOwnership(to);
+          const tx = await contract.transferOwnership(to);
+          const receipt = await tx.wait();
           showToast("Success transferOwnership!");
         } else {
           showToast(`Wrong address: ${to}`, "error");
         }
       } catch (e) {
         console.error(e);
-        showToast("Error call transferOwnership!", "error");
+        if (e.data.message === "execution reverted: UNAUTHORIZED")
+          showToast("Error, you're not the owner of the contract!", "error");
+        else showToast("Error call transferOwnership!", "error");
       }
 
       transferOwnership.reset();
@@ -334,11 +337,14 @@
       }
 
       try {
-        await contract.safeMint(to, uri);
+        const tx = await contract.safeMint(to, uri);
+        const receipt = await tx.wait();
         showToast("Successfully minted!");
       } catch (e) {
         console.error(e);
-        showToast("Error call safeMint", "error");
+        if (e.data.message === "execution reverted: UNAUTHORIZED")
+          showToast("Error, you're not the owner of the contract!", "error");
+        else showToast("Error call safeMint", "error");
       }
 
       mintForm.reset();
@@ -350,12 +356,16 @@
       const id = formData.get("id");
 
       try {
-        await contract.burn(id);
-
+        const tx = await contract.burn(id);
+        const receipt = await tx.wait();
         showToast("Successfully burned!");
       } catch (e) {
         console.error(e);
-        showToast("Error call burn!", "error");
+        if (e.data.message === "execution reverted: NOT_MINTED")
+          showToast("Error call burn, such an ID does not exist!", "error");
+        else if (e.data.message === "execution reverted: UNAUTHORIZED")
+          showToast("Error, you're not the owner of the contract!", "error");
+        else showToast("Error call burn", "error");
       }
 
       burnForm.reset();

@@ -302,9 +302,11 @@
 
       try {
         if (!to) {
-          await contract.transferOwnership(
+          const tx = await contract.transferOwnership(
             "0x0000000000000000000000000000000000000000"
           );
+          const receipt = await tx.wait();
+          console.log(receipt);
           showToast("Success transferOwnership to null address!");
         } else if (validateAddress(to)) {
           await contract.transferOwnership(to);

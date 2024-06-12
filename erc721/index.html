@@ -149,30 +149,27 @@
     let contractAddress;
     const getAddress = async () => {
       // for forward
-      // contractAddress = document.getElementById("future_address").innerHTML;
-      // console.log("Contract:", contractAddress);
+      contractAddress = document.getElementById("future_address").innerHTML;
+      console.log("Contract:", contractAddress);
       // for forward
     };
 
     let provider, wallet, contract, address;
 
-    // for tests
-    const privateKey =
-      "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80";
-    contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
-    // for tests
-
     async function connectToContract() {
       // for forward
-      // provider = new ethers.providers.Web3Provider(this.parent.ethereum);
-      // wallet = provider.getSigner();
-      // contract = new ethers.Contract(contractAddress, abi, wallet);
+      provider = new ethers.providers.Web3Provider(this.parent.ethereum);
+      wallet = provider.getSigner();
+      contract = new ethers.Contract(contractAddress, abi, wallet);
       // for forward
 
       // for tests
-      provider = new ethers.providers.JsonRpcProvider();
-      wallet = new ethers.Wallet(privateKey, provider);
-      contract = new ethers.Contract(contractAddress, abi, wallet);
+      // const privateKey =
+      //   "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80";
+      // contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
+      // provider = new ethers.providers.JsonRpcProvider();
+      // wallet = new ethers.Wallet(privateKey, provider);
+      // contract = new ethers.Contract(contractAddress, abi, wallet);
       // for tests
 
       address = await wallet.getAddress();
@@ -210,87 +207,72 @@
     const getNfts = async () => {
       nfts.length = 0;
       const get_nfts = await contract.queryFilter("Transfer");
-      get_nfts.forEach((nft) => {
+      for (let item in get_nfts) {
+        const nft = get_nfts[item];
+        const id = nft.args[2];
+        let ownerAddress;
+        try {
+          ownerAddress = await contract.ownerOf(id);
+        } catch (e) {
+          continue;
+        }
+        console.log("owner", ownerAddress);
         nfts.push(nft.args);
-      });
+      }
     };
 
     const renderNfts = async () => {
       const section = document.getElementById("nft-cards");
       section.innerHTML = "";
       console.log(nfts.length);
+
       for (let item in nfts) {
         const nft = nfts[item];
         const id = nft[2];
+        let json = {
+          name: "Name not defined",
+          description: "Description not found",
+          image: "https://via.assets.so/img.jpg?w=400&h=300&tc=blue&bg=#cecece",
+        };
+        let ownerAddress = "Unknown";
+
         try {
           const link = await contract.tokenURI(id);
-          let json = {
-            name: "Name not defined",
-            description: "Description not found",
-            image:
-              "https://via.assets.so/img.jpg?w=400&h=300&tc=blue&bg=#cecece",
-          };
+          ownerAddress = await contract.ownerOf(id);
 
           if (link && link.startsWith("http")) {
             const res = await fetch(link);
             json = await res.json();
-          } else {
-            // customCallToast(`Invalid or missing link for NFT with ID: ${id}`);
           }
-
-          const ownerAddress = await contract.ownerOf(id);
-
-          section.innerHTML += `
-        <div class="card max-w-[320px] bg-base-100 shadow-xl">
-            <figure>
-                <img
-                    src="${json.image}"
-                    alt="NFT Image"
-                    class="max-h-[250px] w-full object-cover"
-                />
-            </figure>
-            <div class="card-body">
-                <h2 class="card-title">${json.name}</h2>
-                <div class="flex flex-col gap-2 text-xl font-medium">
-                    <div class="flex items-center justify-between w-full">
-                        <p>ID:</p> <p class="text-lg font-normal text-end">${id}</p>
-                    </div>
-                    <div class="flex items-center justify-between w-full">
-                        <p>Owner:</p> <p class="text-lg font-normal text-end">${shortenAddress(
-                          ownerAddress
-                        )}</p>
-                    </div>
-                </div>
-                <p>${json.description}</p>
-            </div>
-        </div>
-      `;
         } catch (err) {
-          customCallToast(`Failed to load NFT with ID: ${id}`);
-          section.innerHTML += `
-        <div class="card max-w-[320px] bg-base-100 shadow-xl">
-            <figure>
-                <img
-                    src="https://via.assets.so/img.jpg?w=400&h=300&tc=blue&bg=#cecece"
-                    alt="NFT Image"
-                    class="max-h-[250px] w-full object-cover"
-                />
-            </figure>
-            <div class="card-body">
-                <h2 class="card-title">Name not defined</h2>
-                <div class="flex flex-col gap-2 text-xl font-medium">
-                    <div class="flex items-center justify-between w-full">
-                        <p>ID:</p> <p class="text-lg font-normal text-end">${id}</p>
-                    </div>
-                    <div class="flex items-center justify-between w-full">
-                        <p>Owner:</p> <p class="text-lg font-normal text-end">Unknown</p>
-                    </div>
-                </div>
-                <p>Description not found</p>
-            </div>
-        </div>
-      `;
+          // Handle errors silently, using default json and ownerAddress
         }
+
+        section.innerHTML += `
+      <div class="card max-w-[320px] bg-base-100 shadow-xl">
+          <figure>
+              <img
+                  src="${json.image}"
+                  alt="NFT Image"
+                  class="max-h-[250px] w-full object-cover"
+              />
+          </figure>
+          <div class="card-body">
+              <h2 class="card-title">${json.name}</h2>
+              <div class="flex flex-col gap-2 text-xl font-medium">
+                  <div class="flex items-center justify-between w-full">
+                      <p>ID:</p> <p class="text-lg font-normal text-end">${id}</p>
+                  </div>
+                  <div class="flex items-center justify-between w-full">
+                      <p>Owner:</p> <p class="text-lg font-normal text-end">${shortenAddress(
+                        ownerAddress
+                      )}</p>
+                  </div>
+              </div>
+              <p>${json.description}</p>
+          </div>
+      </div>
+    `;
       }
     };
 
@@ -298,13 +280,22 @@
       nfts.length = 0;
       const transferEvents = await contract.queryFilter("Transfer");
 
-      transferEvents.forEach((event) => {
-        const toAddress = event.args[1];
+      for (let item in transferEvents) {
+        const nft = transferEvents[item];
+        const id = nft.args[2];
+        const toAddress = nft.args[1];
+        let ownerAddress;
+        try {
+          ownerAddress = await contract.ownerOf(id);
+        } catch (e) {
+          continue;
+        }
+        console.log("owner", ownerAddress);
 
         if (toAddress === myAddress) {
-          nfts.push(event.args);
+          nfts.push(nft.args);
         }
-      });
+      }
     };
 
     // TAB SWITCHING LOGIC

@@ -338,7 +338,7 @@
 
       try {
         const tx = await contract.safeMint(to, uri);
-        const receipt = await tx.wait();
+        await tx.wait();
         showToast("Successfully minted!");
       } catch (e) {
         console.error(e);
@@ -357,7 +357,7 @@
 
       try {
         const tx = await contract.burn(id);
-        const receipt = await tx.wait();
+        await tx.wait();
         showToast("Successfully burned!");
       } catch (e) {
         console.error(e);

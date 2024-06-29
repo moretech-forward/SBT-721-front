@@ -1,4 +1,4 @@
-<body id="itrf">
+<body>
   <meta charset="UTF-8" />
   <meta content="width=device-width, initial-scale=1.0" name="viewport" />
   <link
@@ -72,9 +72,16 @@
                       setTimeout(() => {
                         const future_address =
                           document.getElementById("future_address");
+
                         future_address.innerHTML = document.getElementById(
                           "form-output-myAddr-0"
                         ).innerHTML;
+
+                        console.log(
+                          "addr",
+                          document.getElementById("form-output-myAddr-0")
+                            .innerHTML
+                        );
                       }, 1000);
                     }
                   }, 1000);
@@ -100,6 +107,10 @@
       id="collection-name"
       class="text-center text-xl font-semibold text-white"
     ></h2>
+    <h3
+      id="network-name"
+      class="text-center text-xl font-semibold text-white"
+    ></h3>
     <div class="tabs tabs-boxed" role="tablist">
       <a
         class="tab tab-active transition-all duration-200"
@@ -119,15 +130,19 @@
   </section>
 
   <script
-    src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js"
-    type="application/javascript"
-  ></script>
-  <script
     src="https://cdn.jsdelivr.net/npm/toastify-js"
     type="text/javascript"
   ></script>
   <script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
-  <script>
+  <script type="module">
+    import {
+      Contract,
+      getDefaultProvider,
+      BrowserProvider,
+      Wallet,
+      formatEther,
+    } from "https://cdnjs.cloudflare.com/ajax/libs/ethers/6.12.1/ethers.min.js";
+
     const abi = [
       "constructor(string _name, string _symbol) payable",
       "event OwnershipTransferred(address indexed user, address indexed newOwner)",
@@ -146,7 +161,8 @@
       "function transferOwnership(address newOwner)",
     ];
 
-    let contractAddress;
+    let contractAddress, provider, wallet, contract, address;
+
     const getAddress = async () => {
       // for forward
       contractAddress = document.getElementById("future_address").innerHTML;
@@ -154,33 +170,48 @@
       // for forward
     };
 
-    let provider, wallet, contract, address;
-
     async function connectToContract() {
+      renderNfts([]);
       // for forward
-      provider = new ethers.providers.Web3Provider(this.parent.ethereum);
-      wallet = provider.getSigner();
-      contract = new ethers.Contract(contractAddress, abi, wallet);
+      provider = new BrowserProvider(window.parent.ethereum); // this.parent.ethereum
+      console.log(provider);
+
+      // get account
+      provider.send("eth_requestAccounts", []).then(async () => {
+        const accounts = await provider.listAccounts();
+        if (accounts.length === 0) {
+          const msg = "No accounts found. Please connect to MetaMask.";
+          customCallToast(msg);
+          throw new Error(msg);
+        }
+
+        // get wallet
+        wallet = await provider.getSigner();
+        console.log("Wallet", wallet);
+
+        // get address
+        address = await wallet.getAddress();
+        console.log("Wallet address:", address);
+      });
+
+      // get contract
+      contract = new Contract(contractAddress, abi, wallet);
       // for forward
 
       // for tests
       // const privateKey =
       //   "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80";
       // contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
-      // provider = new ethers.providers.JsonRpcProvider();
-      // wallet = new ethers.Wallet(privateKey, provider);
-      // contract = new ethers.Contract(contractAddress, abi, wallet);
+      // provider = getDefaultProvider("http://localhost:8545/");
+      // wallet = new Wallet(privateKey, provider);
+      // contract = new Contract(contractAddress, abi, wallet);
+      // address = await wallet.getAddress();
+      // console.log("Wallet address:", address);
       // for tests
 
-      address = await wallet.getAddress();
-      console.log("Wallet address:", address);
+      await getNetworkName();
+      await getCollectionName();
     }
-
-    setTimeout(() => {
-      getAddress();
-      connectToContract();
-      getCollectionName();
-    }, 2100);
 
     const getCollectionName = async () => {
       // GET COLLECTION NAME
@@ -188,6 +219,20 @@
       const collectionSymbol = await contract.symbol();
       document.getElementById("collection-name").innerText =
         collectionName + " (" + collectionSymbol + ")";
+    };
+
+    const getNetworkName = async () => {
+      // GET NETWORK NAME
+      const network = await provider.getNetwork();
+      const chainList = await fetch("https://chainid.network/chains.json");
+      const res = await chainList.json();
+      let chainData = res.find(
+        (obj) => obj.chainId.toString() === network.chainId.toString()
+      );
+      document.getElementById("network-name").innerHTML =
+        "Network: " + chainData.name.toString();
+      document.getElementById("network-name").style.color = "green";
+      console.log(chainData.name.toString());
     };
 
     function shortenAddress(address) {
@@ -203,7 +248,11 @@
       }).showToast();
     };
 
+    // Arrays SBTs
     let nfts = [];
+    let mynfts = [];
+
+    // Filling the array with all SBTs
     const getNfts = async () => {
       nfts.length = 0;
       const get_nfts = await contract.queryFilter("Transfer");
@@ -221,31 +270,79 @@
       }
     };
 
-    const renderNfts = async () => {
+    // Filling the array with only those SBTs that belong to the address
+    const getMyNfts = async (myAddress) => {
+      mynfts.length = 0;
+
+      console.log("wq", contract.target);
+      const transferEvents = await contract.queryFilter("Transfer");
+
+      for (let item in transferEvents) {
+        const nft = transferEvents[item];
+        const id = nft.args[2];
+        const toAddress = nft.args[1];
+        let ownerAddress;
+        try {
+          ownerAddress = await contract.ownerOf(id);
+        } catch (e) {
+          continue;
+        }
+        console.log("owner", ownerAddress);
+
+        if (toAddress === myAddress) {
+          mynfts.push(nft.args);
+        }
+      }
+    };
+
+    // Output the SBTs array
+    const renderNfts = async (nfts) => {
       const section = document.getElementById("nft-cards");
       section.innerHTML = "";
-      console.log(nfts.length);
+      console.log("len in render", nfts.length);
+      console.log(nfts[0]);
+
+      // If the nfts array is empty, we add an SBT example
+      if (nfts.length === 0) {
+        const exampleNft = {
+          id: "Example ID",
+          owner: "0x0000000000000000000000000000000000000000",
+          json: {
+            name: "Example SBT",
+            description:
+              "This is an example SBT used when no SBTs are available.",
+            image:
+              "https://moretech-forward.github.io/SBT-721-front/metadata/logo.png",
+          },
+        };
+
+        nfts.push(exampleNft);
+      }
 
       for (let item in nfts) {
         const nft = nfts[item];
-        const id = nft[2];
+        const id = nft[2] || nft.id;
         let json = {
           name: "Name not defined",
           description: "Description not found",
-          image: "https://via.assets.so/img.jpg?w=400&h=300&tc=blue&bg=#cecece",
+          image: "https://via.assets.so/img.jpg?w=400&h=300&tc=red&bg=#cecece",
         };
-        let ownerAddress = "Unknown";
+        let ownerAddress = nft.owner || "Unknown";
 
-        try {
-          const link = await contract.tokenURI(id);
-          ownerAddress = await contract.ownerOf(id);
+        if (!nft.json) {
+          try {
+            const link = await contract.tokenURI(id);
+            ownerAddress = await contract.ownerOf(id);
 
-          if (link && link.startsWith("http")) {
-            const res = await fetch(link);
-            json = await res.json();
+            if (link && link.startsWith("http")) {
+              const res = await fetch(link);
+              json = await res.json();
+            }
+          } catch (err) {
+            // Handle errors silently, using default json and ownerAddress
           }
-        } catch (err) {
-          // Handle errors silently, using default json and ownerAddress
+        } else {
+          json = nft.json;
         }
 
         section.innerHTML += `
@@ -276,42 +373,31 @@
       }
     };
 
-    const getMyNfts = async (myAddress) => {
-      nfts.length = 0;
-      const transferEvents = await contract.queryFilter("Transfer");
+    // Example output
+    renderNfts([]);
 
-      for (let item in transferEvents) {
-        const nft = transferEvents[item];
-        const id = nft.args[2];
-        const toAddress = nft.args[1];
-        let ownerAddress;
-        try {
-          ownerAddress = await contract.ownerOf(id);
-        } catch (e) {
-          continue;
-        }
-        console.log("owner", ownerAddress);
-
-        if (toAddress === myAddress) {
-          nfts.push(nft.args);
-        }
-      }
-    };
+    //INIT APP
+    setTimeout(() => {
+      getAddress();
+      connectToContract();
+    }, 2300);
 
     // TAB SWITCHING LOGIC
     const mySbtTab = document.getElementById("my-sbt-tab");
     const allSbtTab = document.getElementById("all-sbt-tab");
 
-    mySbtTab.addEventListener("click", () => {
+    mySbtTab.addEventListener("click", async () => {
       mySbtTab.classList.add("tab-active");
       allSbtTab.classList.remove("tab-active");
-      getMyNfts(address).then(renderNfts);
+      await getMyNfts(address);
+      await renderNfts(mynfts);
     });
 
-    allSbtTab.addEventListener("click", () => {
+    allSbtTab.addEventListener("click", async () => {
       allSbtTab.classList.add("tab-active");
       mySbtTab.classList.remove("tab-active");
-      getNfts().then(renderNfts);
+      await getNfts();
+      await renderNfts(nfts);
     });
 
     setTimeout(() => {

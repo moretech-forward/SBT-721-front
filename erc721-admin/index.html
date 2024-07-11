@@ -1,7 +1,7 @@
 <body id="itrf">
   <meta charset="UTF-8" />
   <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-  <link href="./build.css" rel="stylesheet" />
+  <link href="./output.css" rel="stylesheet" />
   <link
     href="https://cdn.jsdelivr.net/npm/daisyui@4.10.3/dist/full.min.css"
     rel="stylesheet"
@@ -12,61 +12,36 @@
     rel="stylesheet"
     type="text/css"
   />
-
-  <div class="p-2 invisible hidden">
-    <div class="accordion">
-      <div class="accordion-item">
-        <section class="m-auto w-100">
-          <h3 id="headingOne" class="accordion-header text-center">
-            <button
-              type="button"
-              data-bs-toggle="collapse"
-              data-bs-target="#collapse_myAddr"
-              aria-expanded="true"
-              aria-controls="collapse_myAddr"
-              class="accordion-button collapsed"
-            >
-              myAddr
-            </button>
-          </h3>
-          <div
-            id="collapse_myAddr"
-            aria-labelledby="headingOne"
-            data-bs-parent="#accordionExample"
-            class="accordion-collapse collapse"
-          >
-            <div class="accordion-body">
-              <form id="form-myAddr" class="d-flex flex-column gap-2 p-2">
-                <div>
-                  <button
-                    type="button"
-                    data-form-name="myAddr"
-                    class="btn btn-primary mt-2"
-                    id="btn"
-                  >
-                    Read
-                  </button>
-                </div>
-                <div>
-                  <p>Response:</p>
-                  <div>
-                    :
-                    <span
-                      id="form-output-myAddr-0"
-                      data-form-name="myAddr"
-                      data-field-type="address"
-                      >address</span
-                    >
-                    <br />
-                  </div>
-                </div>
-              </form>
-            </div>
-          </div>
-        </section>
+  <div
+      class="overlay rounded-xl absolute left-0 top-0 z-10 h-full w-full hidden items-center justify-center rounded-2xl"
+  >
+    <span class="loading loading-spinner loading-lg bg-white"></span>
+  </div>
+  <form id="form-myAddr" class="hidden">
+    <div>
+      <button
+          type="button"
+          data-form-name="myAddr"
+          class="btn btn-primary mt-2"
+          id="read-btn"
+      >
+        Read
+      </button>
+    </div>
+    <div>
+      <p>Response:</p>
+      <div>
+        :
+        <span
+            id="form-output-myAddr-0"
+            data-form-name="myAddr"
+            data-field-type="address"
+        >address</span
+        >
+        <br />
       </div>
     </div>
-  </div>
+  </form>
 
   <section
     class="pt-20 items-center flex-col gap-10 bg-base-100 flex"
@@ -119,7 +94,7 @@
         >Transfer ownership</a
       >
     </div>
-    <div class="custom-card card w-96 bg-base-100 shadow-xl" id="tab-1">
+    <div class="relative custom-card card w-96 bg-base-100 shadow-xl" id="tab-1">
       <form class="card-body flex flex-col space-y-4" id="mint_form">
         <div class="flex flex-col gap-2">
           <label for="wallet_address">Wallet address</label>
@@ -185,6 +160,21 @@
   </section>
 
   <script>
+    const button = document.getElementById("read-btn");
+    if (button) {
+      setTimeout(() => {
+        button.click();
+      }, 1000);
+
+      setTimeout(() => {
+        console.log("Contract address: ", document.getElementById(
+          "form-output-myAddr-0"
+        ));
+      }, 2100);
+    }
+  </script>
+
+  <script>
     const abi = [
       "constructor(string _name, string _symbol) payable",
       "event OwnershipTransferred(address indexed user, address indexed newOwner)",
@@ -204,29 +194,9 @@
 
     let provider, wallet, contract, contractAddress;
 
-    async function sleep(ms) {
-      console.log("sleep", ms, "ms");
-      return new Promise((resolve) => setTimeout(resolve, ms));
-    }
-
-    const getForwardContractAddress = () => {
-      const button = document.getElementById("btn");
-      if (button) {
-        setTimeout(() => {
-          button.click();
-        }, 1000);
-
-        setTimeout(() => {
-          contractAddress = document.getElementById(
-            "form-output-myAddr-0"
-          ).innerHTML;
-          console.log("Contract address: ", contractAddress);
-        }, 2100);
-      }
-    };
-
     async function connectToContract() {
       // for forward
+      contractAddress = document.getElementById("form-output-myAddr-0").innerHTML
       provider = new ethers.providers.Web3Provider(this.parent.ethereum);
       wallet = provider.getSigner();
       contract = new ethers.Contract(contractAddress, abi, wallet);
@@ -244,11 +214,9 @@
     }
 
     setTimeout(() => {
-      getForwardContractAddress();
-      sleep(2100);
       connectToContract();
       getCollectionName();
-    }, 100);
+    }, 3000);
 
     const getCollectionName = async () => {
       const collectionName = await contract.name();
@@ -297,6 +265,7 @@
       const to = formData.get("t_ownership");
 
       try {
+        addOverlay("tab-3")
         if (!to) {
           const tx = await contract.transferOwnership(
             "0x0000000000000000000000000000000000000000"
@@ -306,8 +275,9 @@
           showToast("Success transferOwnership to null address!");
         } else if (validateAddress(to)) {
           const tx = await contract.transferOwnership(to);
-          const receipt = await tx.wait();
+          await tx.wait();
           showToast("Success transferOwnership!");
+          transferOwnership.reset();
         } else {
           showToast(`Wrong address: ${to}`, "error");
         }
@@ -316,9 +286,9 @@
         if (e.data.message === "execution reverted: UNAUTHORIZED")
           showToast("Error, you're not the owner of the contract!", "error");
         else showToast("Error call transferOwnership!", "error");
+      } finally {
+        removeOverlay("tab-3")
       }
-
-      transferOwnership.reset();
     });
 
     mintForm.addEventListener("submit", async (event) => {
@@ -333,17 +303,19 @@
       }
 
       try {
+        addOverlay("tab-1")
         const tx = await contract.safeMint(to, uri);
         await tx.wait();
         showToast("Successfully minted!");
+        mintForm.reset();
       } catch (e) {
         console.error(e);
         if (e.data.message === "execution reverted: UNAUTHORIZED")
           showToast("Error, you're not the owner of the contract!", "error");
         else showToast("Error call safeMint", "error");
+      } finally {
+        removeOverlay("tab-1")
       }
-
-      mintForm.reset();
     });
 
     burnForm.addEventListener("submit", async (event) => {
@@ -352,9 +324,11 @@
       const id = formData.get("id");
 
       try {
+        addOverlay("tab-2")
         const tx = await contract.burn(id);
         await tx.wait();
         showToast("Successfully burned!");
+        burnForm.reset();
       } catch (e) {
         console.error(e);
         if (e.data.message === "execution reverted: NOT_MINTED")
@@ -362,9 +336,9 @@
         else if (e.data.message === "execution reverted: UNAUTHORIZED")
           showToast("Error, you're not the owner of the contract!", "error");
         else showToast("Error call burn", "error");
+      } finally {
+        removeOverlay("tab-2")
       }
-
-      burnForm.reset();
     });
   </script>
   <script
@@ -376,4 +350,30 @@
     src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js"
     type="application/javascript"
   ></script>
+
+  <script>
+    let spinner_html = `
+  <span class="loading loading-spinner loading-lg bg-white"></span>
+`;
+
+    function addOverlay(element_id) {
+      let el = document.querySelector(`#${element_id}`);
+      const loader = document.createElement("div");
+      loader.classList =
+        "overlay rounded-xl absolute left-0 top-0 z-10 flex h-full w-full items-center justify-center rounded-2xl";
+      loader.innerHTML = spinner_html;
+      loader.setAttribute("name", "loader");
+      el.appendChild(loader);
+    }
+
+    function removeOverlay(element_id) {
+      let el = document.querySelector(`#${element_id}`);
+      const loader = el.querySelector('[name="loader"]');
+      if (loader) {
+        loader.remove();
+      } else {
+        showToast("Not found overlay in select element!", "warning");
+      }
+    }
+  </script>
 </body>

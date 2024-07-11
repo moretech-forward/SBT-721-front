@@ -15,60 +15,31 @@
   <link href="./output.css" rel="stylesheet" />
 
   <!-- invisible hidden myAdde -->
-  <div class="p-2 invisible hidden">
-    <div class="accordion">
-      <div class="accordion-item">
-        <section class="m-auto w-100">
-          <h3 id="headingOne" class="accordion-header text-center">
-            <button
-              type="button"
-              data-bs-toggle="collapse"
-              data-bs-target="#collapse_myAddr"
-              aria-expanded="true"
-              aria-controls="collapse_myAddr"
-              class="accordion-button collapsed"
-            >
-              myAddr
-            </button>
-          </h3>
-          <div
-            id="collapse_myAddr"
-            aria-labelledby="headingOne"
-            data-bs-parent="#accordionExample"
-            class="accordion-collapse collapse"
-          >
-            <div class="accordion-body">
-              <form id="form-myAddr" class="d-flex flex-column gap-2 p-2">
-                <div>
-                  <button
-                    type="button"
-                    data-form-name="myAddr"
-                    class="btn btn-primary mt-2"
-                    id="btn"
-                  >
-                    Read
-                  </button>
-                </div>
-                <div>
-                  <p>Response:</p>
-                  <div>
-                    :
-                    <span
-                      id="form-output-myAddr-0"
-                      data-form-name="myAddr"
-                      data-field-type="address"
-                      >address</span
-                    >
-                    <br />
-                  </div>
-                </div>
-              </form>
-            </div>
-          </div>
-        </section>
+  <form id="form-myAddr" class="hidden">
+    <div>
+      <button
+          type="button"
+          data-form-name="myAddr"
+          class="btn btn-primary mt-2"
+          id="btn"
+      >
+        Read
+      </button>
+    </div>
+    <div>
+      <p>Response:</p>
+      <div>
+        :
+        <span
+            id="form-output-myAddr-0"
+            data-form-name="myAddr"
+            data-field-type="address"
+        ></span
+        >
+        <br />
       </div>
     </div>
-  </div>
+  </form>
 
   <section
     class="pt-20 flex items-center flex-col gap-10 min-h-screen bg-base-100"
@@ -110,6 +81,23 @@
     type="text/javascript"
   ></script>
   <script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
+
+  <script>
+    const button = document.getElementById("btn");
+    if (button) {
+      setTimeout(() => {
+        button.click();
+        console.log("click to btn")
+      }, 1000);
+
+      setTimeout(() => {
+        console.log("extract contract address")
+        console.log("Contract address: ", document.getElementById(
+          "form-output-myAddr-0"
+        ).innerHTML);
+      }, 2100);
+    }
+  </script>
   <script type="module">
     import {
       Contract,
@@ -137,28 +125,7 @@
       "function transferOwnership(address newOwner)",
     ];
 
-    async function sleep(ms) {
-      console.log("sleep", ms, "ms");
-      return new Promise((resolve) => setTimeout(resolve, ms));
-    }
-
     let contractAddress, provider, wallet, contract, address;
-
-    const getForwardContractAddress = () => {
-      const button = document.getElementById("btn");
-      if (button) {
-        setTimeout(() => {
-          button.click();
-        }, 1000);
-
-        setTimeout(() => {
-          contractAddress = document.getElementById(
-            "form-output-myAddr-0"
-          ).innerHTML;
-          console.log("Contract address: ", contractAddress);
-        }, 2100);
-      }
-    };
 
     async function connectToContract() {
       renderNfts([]);
@@ -367,9 +334,11 @@
     renderNfts([]);
 
     //INIT APP
-    getForwardContractAddress();
-    sleep(2100);
-    connectToContract();
+    console.log("getting contract address...")
+    console.log("connecting to contract...")
+    setTimeout(() => {
+      connectToContract();
+    }, 3000)
 
     // TAB SWITCHING LOGIC
     const mySbtTab = document.getElementById("my-sbt-tab");

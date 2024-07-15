@@ -13,17 +13,17 @@
     type="text/css"
   />
   <div
-      class="overlay rounded-xl absolute left-0 top-0 z-10 h-full w-full hidden items-center justify-center rounded-2xl"
+    class="overlay rounded-xl absolute left-0 top-0 z-10 h-full w-full hidden items-center justify-center rounded-2xl"
   >
     <span class="loading loading-spinner loading-lg bg-white"></span>
   </div>
   <form class="hidden" id="form-myAddr">
     <div>
       <button
-          class="btn btn-primary mt-2"
-          data-form-name="myAddr"
-          id="read-btn"
-          type="button"
+        class="btn btn-primary mt-2"
+        data-form-name="myAddr"
+        id="read-btn"
+        type="button"
       >
         Read
       </button>
@@ -33,36 +33,36 @@
       <div>
         :
         <span
-            data-field-type="address"
-            data-form-name="myAddr"
-            id="form-output-myAddr-0"
-        >address</span
+          data-field-type="address"
+          data-form-name="myAddr"
+          id="form-output-myAddr-0"
+          >address</span
         >
-        <br/>
+        <br />
       </div>
     </div>
   </form>
 
   <script>
-    const btn = document.getElementById("read-btn")
+    const btn = document.getElementById("read-btn");
     if (btn) {
       setTimeout(() => {
-        btn.click()
-      }, 1000)
+        btn.click();
+      }, 1000);
     }
   </script>
 
   <script>
-    const logStyle = 'color: green; font-weight: bold;';
-    const errorStyle = 'color: red; font-weight: bold;';
+    const logStyle = "color: green; font-weight: bold;";
+    const errorStyle = "color: red; font-weight: bold;";
 
-    console.log('%cScript initialized', logStyle);
+    console.log("%cScript initialized", logStyle);
 
     const checkForContractAddress = () => {
-      console.log('%cStarting to check for contract address', logStyle);
+      console.log("%cStarting to check for contract address", logStyle);
 
       const checkAddress = () => {
-        console.log('Checking for contract address in the document');
+        console.log("Checking for contract address in the document");
         const addressElement = document.getElementById("form-output-myAddr-0");
         const address = addressElement ? addressElement.innerHTML : null;
         const addressRegex = /^(0x)?[0-9a-fA-F]{40}$/;
@@ -70,14 +70,14 @@
         if (address) {
           console.log(`Found address: ${address}`);
         } else {
-          console.log('Address not found');
+          console.log("Address not found");
         }
 
         if (address && addressRegex.test(address)) {
           console.log(`%cAddress ${address} is valid`, logStyle);
           contractAddress = address;
           connectToContract();
-          console.log('%cCalled initApp...', logStyle);
+          console.log("%cCalled initApp...", logStyle);
           return true;
         } else {
           console.log(`%cAddress: ${address} is invalid`, errorStyle);
@@ -85,24 +85,29 @@
         return false;
       };
 
-      console.log('Setting interval to check address every 250 ms');
+      console.log("Setting interval to check address every 250 ms");
       const intervalId = setInterval(() => {
         if (checkAddress()) {
           clearInterval(intervalId);
           clearTimeout(timeoutId);
-          console.log('%cAddress found and interval cleared', logStyle);
+          console.log("%cAddress found and interval cleared", logStyle);
         }
       }, 250);
 
       // Set timeout for 5 seconds to stop checking
       const timeoutId = setTimeout(() => {
         clearInterval(intervalId);
-        console.error('%cFailed to obtain contract address within the time limit', errorStyle);
-        customCallToast("Failed to obtain contract address within the time limit, reload page!")
+        console.error(
+          "%cFailed to obtain contract address within the time limit",
+          errorStyle
+        );
+        customCallToast(
+          "Failed to obtain contract address within the time limit, reload page!"
+        );
       }, 5000);
     };
 
-    console.log('Setting timeout to start checking for address in 2 seconds');
+    console.log("Setting timeout to start checking for address in 2 seconds");
     setTimeout(checkForContractAddress, 2000);
   </script>
 
@@ -119,6 +124,10 @@
       id="collection-name"
       class="text-center text-xl font-semibold text-white"
     ></h2>
+    <h3
+      id="network-name"
+      class="text-center text-xl font-semibold text-white"
+    ></h3>
     <div class="px-10 pt-10">
       <button class="btn" onclick="my_modal_1.showModal()">Read info</button>
       <dialog class="modal" id="my_modal_1">
@@ -157,7 +166,10 @@
         >Transfer ownership</a
       >
     </div>
-    <div class="relative custom-card card w-96 bg-base-100 shadow-xl" id="tab-1">
+    <div
+      class="relative custom-card card w-96 bg-base-100 shadow-xl"
+      id="tab-1"
+    >
       <form class="card-body flex flex-col space-y-4" id="mint_form">
         <div class="flex flex-col gap-2">
           <label for="wallet_address">Wallet address</label>
@@ -244,11 +256,10 @@
 
     async function connectToContract() {
       // for forward
-      contractAddress = document.getElementById("form-output-myAddr-0").innerHTML
       provider = new ethers.providers.Web3Provider(this.parent.ethereum);
       wallet = provider.getSigner();
       contract = new ethers.Contract(contractAddress, abi, wallet);
-      console.log("connection", contract);
+      console.log("Contract:", contract);
       // for forward
 
       // for test
@@ -259,16 +270,31 @@
       // wallet = new ethers.Wallet(privateKey, provider);
       // contract = new ethers.Contract(contractAddress, abi, wallet);
       // for test
-
-      getCollectionName();
+      await getNetworkName();
+      await getCollectionName();
     }
 
     const getCollectionName = async () => {
+      // GET COLLECTION NAME
       const collectionName = await contract.name();
       const collectionSymbol = await contract.symbol();
       document.getElementById(
         "collection-name"
       ).innerText = `${collectionName} (${collectionSymbol})`;
+    };
+
+    const getNetworkName = async () => {
+      // GET NETWORK NAME
+      const network = await provider.getNetwork();
+      const chainList = await fetch("https://chainid.network/chains.json");
+      const res = await chainList.json();
+      let chainData = res.find(
+        (obj) => obj.chainId.toString() === network.chainId.toString()
+      );
+      document.getElementById("network-name").innerHTML =
+        "Network: " + chainData.name.toString();
+      document.getElementById("network-name").style.color = "green";
+      console.log(chainData.name.toString());
     };
 
     const tabs = document.querySelectorAll(".tab");
@@ -310,7 +336,7 @@
       const to = formData.get("t_ownership");
 
       try {
-        addOverlay("tab-3")
+        addOverlay("tab-3");
         if (!to) {
           const tx = await contract.transferOwnership(
             "0x0000000000000000000000000000000000000000"
@@ -332,7 +358,7 @@
           showToast("Error, you're not the owner of the contract!", "error");
         else showToast("Error call transferOwnership!", "error");
       } finally {
-        removeOverlay("tab-3")
+        removeOverlay("tab-3");
       }
     });
 
@@ -348,7 +374,7 @@
       }
 
       try {
-        addOverlay("tab-1")
+        addOverlay("tab-1");
         const tx = await contract.safeMint(to, uri);
         await tx.wait();
         showToast("Successfully minted!");
@@ -359,7 +385,7 @@
           showToast("Error, you're not the owner of the contract!", "error");
         else showToast("Error call safeMint", "error");
       } finally {
-        removeOverlay("tab-1")
+        removeOverlay("tab-1");
       }
     });
 
@@ -369,7 +395,7 @@
       const id = formData.get("id");
 
       try {
-        addOverlay("tab-2")
+        addOverlay("tab-2");
         const tx = await contract.burn(id);
         await tx.wait();
         showToast("Successfully burned!");
@@ -382,7 +408,7 @@
           showToast("Error, you're not the owner of the contract!", "error");
         else showToast("Error call burn", "error");
       } finally {
-        removeOverlay("tab-2")
+        removeOverlay("tab-2");
       }
     });
   </script>

@@ -14,14 +14,13 @@
 
   <link href="./output.css" rel="stylesheet" />
 
-  <!-- invisible hidden myAdde -->
-  <form id="form-myAddr" class="hidden">
+  <form class="hidden" id="form-myAddr">
     <div>
       <button
-          type="button"
-          data-form-name="myAddr"
           class="btn btn-primary mt-2"
-          id="btn"
+          data-form-name="myAddr"
+          id="read-btn"
+          type="button"
       >
         Read
       </button>
@@ -31,15 +30,24 @@
       <div>
         :
         <span
-            id="form-output-myAddr-0"
-            data-form-name="myAddr"
             data-field-type="address"
-        ></span
+            data-form-name="myAddr"
+            id="form-output-myAddr-0"
+        >address</span
         >
-        <br />
+        <br/>
       </div>
     </div>
   </form>
+
+  <script>
+    const btn = document.getElementById("read-btn")
+    if (btn) {
+      setTimeout(() => {
+        btn.click()
+      }, 1000)
+    }
+  </script>
 
   <section
     class="pt-20 flex items-center flex-col gap-10 min-h-screen bg-base-100"
@@ -82,22 +90,6 @@
   ></script>
   <script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
 
-  <script>
-    const button = document.getElementById("btn");
-    if (button) {
-      setTimeout(() => {
-        button.click();
-        console.log("click to btn")
-      }, 1000);
-
-      setTimeout(() => {
-        console.log("extract contract address")
-        console.log("Contract address: ", document.getElementById(
-          "form-output-myAddr-0"
-        ).innerHTML);
-      }, 2100);
-    }
-  </script>
   <script type="module">
     import {
       Contract,
@@ -333,13 +325,6 @@
     // Example output
     renderNfts([]);
 
-    //INIT APP
-    console.log("getting contract address...")
-    console.log("connecting to contract...")
-    setTimeout(() => {
-      connectToContract();
-    }, 3000)
-
     // TAB SWITCHING LOGIC
     const mySbtTab = document.getElementById("my-sbt-tab");
     const allSbtTab = document.getElementById("all-sbt-tab");
@@ -357,5 +342,60 @@
       await getNfts();
       await renderNfts(nfts);
     });
+
+
+    // init script
+
+    const logStyle = 'color: green; font-weight: bold;';
+    const errorStyle = 'color: red; font-weight: bold;';
+
+    console.log('%cScript initialized', logStyle);
+
+    const checkForContractAddress = () => {
+      console.log('%cStarting to check for contract address', logStyle);
+
+      const checkAddress = () => {
+        console.log('Checking for contract address in the document');
+        const addressElement = document.getElementById("form-output-myAddr-0");
+        const address = addressElement ? addressElement.innerHTML : null;
+        const addressRegex = /^(0x)?[0-9a-fA-F]{40}$/;
+
+        if (address) {
+          console.log(`Found address: ${address}`);
+        } else {
+          console.log('Address not found');
+        }
+
+        if (address && addressRegex.test(address)) {
+          console.log(`%cAddress ${address} is valid`, logStyle);
+          contractAddress = address;
+          connectToContract();
+          console.log('%cCalled initApp...', logStyle);
+          return true;
+        } else {
+          console.log(`%cAddress: ${address} is invalid`, errorStyle);
+        }
+        return false;
+      };
+
+      console.log('Setting interval to check address every 250 ms');
+      const intervalId = setInterval(() => {
+        if (checkAddress()) {
+          clearInterval(intervalId);
+          clearTimeout(timeoutId);
+          console.log('%cAddress found and interval cleared', logStyle);
+        }
+      }, 250);
+
+      // Set timeout for 5 seconds to stop checking
+      const timeoutId = setTimeout(() => {
+        clearInterval(intervalId);
+        console.error('%cFailed to obtain contract address within the time limit', errorStyle);
+        customCallToast("Failed to obtain contract address within the time limit, reload page!")
+      }, 5000);
+    };
+
+    console.log('Setting timeout to start checking for address in 2 seconds');
+    setTimeout(checkForContractAddress, 2000);
   </script>
 </body>
